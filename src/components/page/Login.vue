@@ -63,39 +63,46 @@ export default {
       this.$refs.formData.validate(valid => {
         if (valid) {
           let that = this;
-          axios
-            .get(
-              "https://www.easy-mock.com/mock/5c702a27d3044d1448586d67/amKnow/user"
-            )
-            .then(response => {
-              let userInfs = response.data;
-              let flag = false;
-              let userInf = {};
-              for (let index in userInfs) {
-                if (
-                  userInfs[index].username == that.formData.username &&
-                  userInfs[index].password == that.formData.password
-                ) {
-                  flag = true;
-                  userInf = userInfs[index];
-                }
-              }
-              if (!flag) {
-                this.$message({
-                  message: "用户名或密码错误",
-                  type: "error"
-                });
-              } else {
-                sessionStorage.setItem("userInf", JSON.stringify(userInf));
-                this.$router.push({ path: "/automobileInfMng" });
-              }
-            })
-            .catch(error => {
-              that.$message({
-                message: "网络错误,请稍后再试",
-                type: "error"
-              });
-            });
+
+          // 模拟登录成功
+          let userInf = {};
+          sessionStorage.setItem("userInf", JSON.stringify(userInf));
+          this.$router.push({ path: "/automobileInfMng" });
+
+
+          // axios
+          //   .get(
+          //     "https://www.easy-mock.com/mock/5c702a27d3044d1448586d67/amKnow/user"
+          //   )
+          //   .then(response => {
+          //     let userInfs = response.data;
+          //     let flag = false;
+          //     let userInf = {};
+          //     for (let index in userInfs) {
+          //       if (
+          //         userInfs[index].username == that.formData.username &&
+          //         userInfs[index].password == that.formData.password
+          //       ) {
+          //         flag = true;
+          //         userInf = userInfs[index];
+          //       }
+          //     }
+          //     if (!flag) {
+          //       this.$message({
+          //         message: "用户名或密码错误",
+          //         type: "error"
+          //       });
+          //     } else {
+          //       sessionStorage.setItem("userInf", JSON.stringify(userInf));
+          //       this.$router.push({ path: "/automobileInfMng" });
+          //     }
+          //   })
+          //   .catch(error => {
+          //     that.$message({
+          //       message: "网络错误,请稍后再试",
+          //       type: "error"
+          //     });
+          //   });
         }
       });
     }
