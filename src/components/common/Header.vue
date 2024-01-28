@@ -40,7 +40,7 @@ import store from "@/vuex/store";
 export default {
   data() {
     return {
-      systemName: "amKnow",
+      systemName: "故障诊断示例",
       image: ""
     };
   },

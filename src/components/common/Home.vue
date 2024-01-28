@@ -28,6 +28,17 @@ export default {
         {
           //一级
           entity: {
+            id: "GZ",
+            name: "故障诊断",
+            // icon图标定义
+            icon: "icon iconfont icon-similarproduct",
+            // 跳转路径
+            path: "addcase"
+          }
+        },
+        {
+          //一级
+          entity: {
             id: "AM",
             name: "汽车管理",
             icon: "icon iconfont icon-box",
