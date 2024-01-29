@@ -37,6 +37,16 @@ export default {
           }
         },
         {
+          entity: {
+            id: "CM",
+            name: "案例管理",
+            // icon图标定义
+            icon: "icon iconfont el-icon-connection",
+            // 跳转路径
+            path: "caseManage"
+          }
+        },
+        {
           //一级
           entity: {
             id: "AM",
@@ -63,15 +73,6 @@ export default {
               }
             }
           ]
-        },
-        {
-          //一级
-          entity: {
-            id: "SM",
-            name: "库存管理",
-            icon: "icon iconfont icon-similarproduct",
-            path: "stockManage"
-          }
         },
         {
           //一级

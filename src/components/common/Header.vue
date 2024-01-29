@@ -1,38 +1,8 @@
 <template>
   <header class="header">
-    <el-col :span="4" class="logo" :class="getCollapse?'logo-collapse-width':'logo-width'">
-      {{getCollapse?"":systemName}}
-      <i
-        v-show="getCollapse"
-        class="icon iconfont icon-tubiaozhizuomoban"
-      ></i>
-    </el-col>
-    <el-col :span="4">
-      <div class="collapse-tool" @click="$store.state.isActive && $store.commit('collapse')">
-        <i :class="getCollapse?'icon iconfont icon-right':'icon iconfont icon-left'"></i>
-      </div>
-    </el-col>
-    <el-col :span="6" class="user">
-      <el-dropdown>
-        <span class="el-dropdown-link user-span">
-          <img :src="image" class="head-portrait">
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>
-            <i class="icon iconfont icon-user"></i>
-            <span class="icon-span">个人信息</span>
-          </el-dropdown-item>
-          <el-dropdown-item>
-            <i class="icon iconfont icon-edit-square"></i>
-            <span class="icon-span">修改资料</span>
-          </el-dropdown-item>
-          <el-dropdown-item divided @click.native="logout">
-            <i class="icon iconfont icon-poweroff"></i>
-            <span class="icon-span">退出</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </el-col>
+    <el-row type="flex" justify="center">
+      <el-col :span="24" style="text-align: center;">多特征融合的汽车故障诊断服务系统</el-col>
+    </el-row>
   </header>
 </template>
 <script>
@@ -40,8 +10,6 @@ import store from "@/vuex/store";
 export default {
   data() {
     return {
-      systemName: "故障诊断示例",
-      image: ""
     };
   },
   store,

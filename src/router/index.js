@@ -38,14 +38,6 @@ export default new Router({
                     }
                 },
                 {
-                    path: 'stockManage',
-                    name: 'StockMng',
-                    component: resolve => require(['@/components/page/StockMng'], resolve),
-                    meta: {
-                        keepAlive: true // 需要缓存
-                    }
-                },
-                {
                     path: 'Dashboard',
                     name: 'Dashboard',
                     component: resolve => require(['@/components/page/Dashboard'], resolve),
@@ -67,6 +59,15 @@ export default new Router({
                     path: 'faultDiagnosis',
                     name: 'fault-diagnosis',
                     component: resolve => require(['@/components/page/faultDiagnosis'], resolve),
+                    meta: {
+                        keepAlive: true // 需要缓存
+                    }
+                },
+                // 案例管理 
+                {
+                    path: 'caseManage',
+                    name: 'caseManage',
+                    component: resolve => require(['@/components/page/caseManage'], resolve),
                     meta: {
                         keepAlive: true // 需要缓存
                     }
