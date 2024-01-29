@@ -6,23 +6,21 @@
         <hr>
         <!-- 案例表格 -->
         <div>
+            <!-- 条件搜索框 -->
             <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
                 <el-form-item>
-                    <el-select v-model="carSeries" placeholder="车系">
+                    <el-select v-model="dataFilter.carSeries" placeholder="车系">
                         <el-option v-for="item in cars" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="value" placeholder="车型">
+                    <el-select v-model="dataFilter.carType" placeholder="车型">
                         <el-option v-for="item in cars" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="formInline.region" placeholder="活动区域">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
+                    <el-input v-model="dataFilter.keyword" placeholder="故障关键词"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="">查询</el-button>
@@ -54,15 +52,17 @@ export default {
 
     data() {
         return {
-            // 搜索筛选条件
-            formInline: {
-                user: '',
-                region: ''
+            // 搜索条件
+            dataFilter: {
+                // 用户选择的车系
+                carSeries: null,
+                // 关键词
+                keyword: null,
+                // 选择的车型
+                carType: null
             },
             // 车系选择数组
             cars: ['大众', '宝马', '奔驰', '比亚迪'],
-            // 用户选择的车系
-            carSeries: null,
             // 表格数据数组
             tableData: [
                 {

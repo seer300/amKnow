@@ -22,22 +22,6 @@ export default new Router({
             component: resolve => require(['@/components/common/Home'], resolve),
             children: [
                 {
-                    path: 'automobileInfMng',
-                    name: 'AutomobileInfMng',
-                    component: resolve => require(['@/components/page/AutomobileInfMng'], resolve),
-                    meta: {
-                        keepAlive: true // 需要缓存
-                    }
-                },
-                {
-                    path: 'automobileBrandMng',
-                    name: 'AutomobileBrandMng',
-                    component: resolve => require(['@/components/page/AutomobileBrandMng'], resolve),
-                    meta: {
-                        keepAlive: true // 需要缓存
-                    }
-                },
-                {
                     path: 'Dashboard',
                     name: 'Dashboard',
                     component: resolve => require(['@/components/page/Dashboard'], resolve),

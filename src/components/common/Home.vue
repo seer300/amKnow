@@ -49,34 +49,6 @@ export default {
         {
           //一级
           entity: {
-            id: "AM",
-            name: "汽车管理",
-            icon: "icon iconfont icon-box",
-            path: "automobileMng"
-          },
-          //二级
-          childs: [
-            {
-              entity: {
-                id: "AIM",
-                name: "汽车信息管理",
-                icon: "",
-                path: "automobileInfMng"
-              }
-            },
-            {
-              entity: {
-                id: "ABM",
-                name: "汽车品牌管理",
-                icon: "",
-                path: "automobileBrandMng"
-              }
-            }
-          ]
-        },
-        {
-          //一级
-          entity: {
             id: "DB",
             name: "Dashboard",
             icon: "icon iconfont icon-viewgallery",
