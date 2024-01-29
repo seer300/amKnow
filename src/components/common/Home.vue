@@ -28,12 +28,12 @@ export default {
         {
           //一级
           entity: {
-            id: "GZ",
+            id: "FD",
             name: "故障诊断",
             // icon图标定义
-            icon: "icon iconfont icon-similarproduct",
+            icon: "icon iconfont el-icon-connection",
             // 跳转路径
-            path: "addcase"
+            path: "faultDiagnosis"
           }
         },
         {

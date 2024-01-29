@@ -61,6 +61,15 @@ export default new Router({
                     meta: {
                         keepAlive: true // 需要缓存
                     }
+                },
+                // 故障诊断页面
+                {
+                    path: 'faultDiagnosis',
+                    name: 'fault-diagnosis',
+                    component: resolve => require(['@/components/page/faultDiagnosis'], resolve),
+                    meta: {
+                        keepAlive: true // 需要缓存
+                    }
                 }
             ]
         },
