@@ -8,23 +8,23 @@
         <div>
             <!-- 条件搜索框 -->
             <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-                <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item>
-                    <el-select v-model="dataFilter.carSeries" placeholder="车系">
-                        <el-option v-for="item in cars" :key="item" :label="item" :value="item"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-select v-model="dataFilter.carType" placeholder="车型">
-                        <el-option v-for="item in cars" :key="item" :label="item" :value="item"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-input v-model="dataFilter.keyword" placeholder="故障关键词"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="">查询</el-button>
-                </el-form-item>
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item>
+                        <el-select v-model="dataFilter.carSeries" placeholder="车系">
+                            <el-option v-for="item in cars" :key="item" :label="item" :value="item"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="dataFilter.carType" placeholder="车型">
+                            <el-option v-for="item in cars" :key="item" :label="item" :value="item"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="dataFilter.keyword" placeholder="故障关键词"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="searchData">查询</el-button>
+                    </el-form-item>
                 </el-form>
             </el-col>
 
@@ -38,20 +38,34 @@
 
                 <el-table-column label="操作" fixed="right">
                     <template slot-scope="scope">
-                        <el-link type="primary">查看详情</el-link>
-                        <el-link type="primary">收藏</el-link>
+                        <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
+                        <el-link type="primary" @click="">收藏</el-link>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
+        <!-- 弹窗标签 -->
+        <CaseDialog :isShow="dialogShow" :caseDetails="caseDetails"></CaseDialog>
     </div>
 </template>
 
 <script>
+import CaseDialog from "@/components/common/CaseDialog";
+
 export default {
+    // 当前页面组件用到的子组件
+    components: {
+        CaseDialog
+    },
 
     data() {
+        // TODO:此处应该从后端获取数据,目前直接返回模拟数据
+
         return {
+            // 弹窗是否展示
+            dialogShow: false,
+            // 用户点击查看详情时，选择的案例数据
+            caseDetails: {},
             // 搜索条件
             dataFilter: {
                 // 用户选择的车系
@@ -103,7 +117,27 @@ export default {
             ]
         }
     },
+    methods: {
+        // 用户点击查看案例的调用函数
+        showDetails(rowdata){
+            // 展示弹窗
+            this.dialogShow = true;
+            // 修改用户指定的数据
+            this.caseDetails = rowdata;
 
+        },
+        // 用户点击搜索案例时的调用函数
+        searchData(){
+            // 获取到用户的筛选条件
+
+            // 请求后端条件搜索数据
+
+        },
+        // 用户关闭查看案例弹窗
+        closeDialog(){
+            this.dialogShow = false;
+        }
+    }
 }
 
 </script>
