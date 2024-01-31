@@ -26,6 +26,16 @@ export default {
     return {
       menuData: [
         {
+          entity: {
+            id: "HE",
+            name: "首页",
+            // icon图标定义
+            icon: "icon iconfont el-icon-connection",
+            // 跳转路径
+            path: "home"
+          }
+        },
+        {
           //一级
           entity: {
             id: "FD",

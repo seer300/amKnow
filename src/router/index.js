@@ -55,6 +55,15 @@ export default new Router({
                     meta: {
                         keepAlive: true // 需要缓存
                     }
+                },
+                // 首页仪表盘
+                {
+                    path: 'home',
+                    name: 'home',
+                    component: resolve => require(['@/components/page/Home'], resolve),
+                    meta: {
+                        keepAlive: true // 需要缓存
+                    }
                 }
             ]
         },

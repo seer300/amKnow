@@ -3,7 +3,7 @@
         <div>
             <el-link type="primary">个人收藏案例</el-link>
         </div>
-        <hr>
+        <el-divider></el-divider>
         <!-- 案例表格 -->
         <div>
             <!-- 条件搜索框 -->

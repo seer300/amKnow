@@ -4,10 +4,16 @@
         :visible="isShow"
         @close="closeWin"
     >
-        <el-form>
-            <h1>{{ caseDetails.id }}</h1>
-            <h1>{{ caseDetails.series }}</h1>
-            <h1>{{ caseDetails.model }}</h1>
+        <el-form :label-position="labelPosition" label-width="120px" :model="formLabelAlign" :disabled="true">
+            <el-form-item label="案例ID">
+                <el-input v-model="caseDetails.id"></el-input>
+            </el-form-item>
+            <el-form-item label="车系">
+                <el-input v-model="caseDetails.series"></el-input>
+            </el-form-item>
+            <el-form-item label="车型">
+                <el-input v-model="caseDetails.model"></el-input>
+            </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="closeWin">关闭</el-button>
