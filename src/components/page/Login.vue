@@ -67,7 +67,7 @@ export default {
           // 模拟登录成功
           let userInf = {};
           sessionStorage.setItem("userInf", JSON.stringify(userInf));
-          this.$router.push({ path: "/faultDiagnosis" });
+          this.$router.push({ path: "/home" });
 
 
           // axios

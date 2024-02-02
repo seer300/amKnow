@@ -1,5 +1,5 @@
 <template>
-  <div :class="getCollapse?'collapsed-main':'main'">
+  <div :class="getCollapse?'collapsed-main':'main'" style="overflow: auto;">
     <el-col :span="24">
       <el-breadcrumb class="breadcrumb-inner">
         <el-breadcrumb-item

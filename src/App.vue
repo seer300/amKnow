@@ -19,7 +19,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #48576a;
   margin-top: 0px;
-  overflow: hidden;
 }
 .fade-enter-active,
 .fade-leave-active {
