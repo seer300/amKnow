@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import faultDialog from "@/components/common/faultDialog";
+
 export default {
 
 

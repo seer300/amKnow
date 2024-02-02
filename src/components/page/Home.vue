@@ -44,25 +44,19 @@
         <el-row>
             <p>热点解决方案</p>
             <el-col :span="24">
-                <div class="">
-
-                    <el-table :data="tableData" :border="true" style="width: 100%">
-                        <el-table-column
-                        prop="date"
-                        label="日期"
-                        width="180">
-                        </el-table-column>
-                        <el-table-column
-                        prop="name"
-                        label="姓名"
-                        width="180">
-                        </el-table-column>
-                        <el-table-column
-                        prop="address"
-                        label="地址">
-                        </el-table-column>
-                    </el-table>
-                </div>
+                <el-table :data="tableData" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+                highlight-current-row height="220" style="border:1px solid #dfe6ec;">
+                    <el-table-column type="index" label="ID" align="center"></el-table-column>
+                    <el-table-column prop="series" label="车系" align="center"></el-table-column>
+                    <el-table-column prop="model" label="车型" align="center"></el-table-column>
+                    <el-table-column prop="faultySystem" label="故障系统" align="center"></el-table-column>
+                    <el-table-column prop="faultyDesc" label="故障描述" align="center"></el-table-column>
+                    <el-table-column label="操作" fixed="right">
+                        <template slot-scope="scope">
+                            <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
+                        </template>
+                    </el-table-column>
+                </el-table>
             </el-col>
         </el-row>
         <!-- 故障条形图 饼图 -->
@@ -79,12 +73,36 @@
 
 <script>
 import echarts from "echarts";
+import CaseDialog from "@/components/common/CaseDialog";
 
 export default {
     data() {
         return {
-            tableData: [],
-
+            // 表格数据数组
+            tableData: [
+                {
+                    id: "01",
+                    series: "大众",
+                    model: "捷达",
+                    faultySystem: "发动机",
+                    faultyDesc: "发动机积碳严重"
+                },
+                {
+                    id: "02",
+                    series: "大众",
+                    model: "捷达",
+                    faultySystem: "发动机",
+                    faultyDesc: "发动机积碳严重"
+                },
+                {
+                    id: "03",
+                    series: "大众",
+                    model: "捷达",
+                    faultySystem: "发动机",
+                    faultyDesc: "发动机积碳严重"
+                }
+            ]
+                
         }
     },
     // 组件挂载生命周期函数

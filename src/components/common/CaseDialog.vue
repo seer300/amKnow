@@ -4,17 +4,21 @@
         :visible="isShow"
         @close="closeWin"
     >
-        <el-form :label-position="labelPosition" label-width="120px" :model="formLabelAlign" :disabled="true">
-            <el-form-item label="案例ID">
-                <el-input v-model="caseDetails.id"></el-input>
-            </el-form-item>
-            <el-form-item label="车系">
-                <el-input v-model="caseDetails.series"></el-input>
-            </el-form-item>
-            <el-form-item label="车型">
-                <el-input v-model="caseDetails.model"></el-input>
-            </el-form-item>
-        </el-form>
+        <!-- 车辆基本信息 -->
+        <div>
+            <el-descriptions title="车辆基本信息">
+                <el-descriptions-item label="案例ID">{{ caseDetails.id }}</el-descriptions-item>
+                <el-descriptions-item label="车系">{{ caseDetails.series }}</el-descriptions-item>
+                <el-descriptions-item label="车型">{{ caseDetails.model }}</el-descriptions-item>
+            </el-descriptions>
+        </div>
+        <!-- 重大信息 -->
+        <div>
+            <h3 class="texttitle">重大信息</h3>
+            <div class="textbody">故障描述：{{ null }}</div>
+            <div class="textbody">故障原因：{{ null }}</div>
+            <div class="textbody">处理意见：{{ null }}</div>
+        </div>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="closeWin">关闭</el-button>
         </div>
@@ -45,4 +49,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+    .texttitle{
+        color: black;
+    }
+    .textbody{
+        color: black;
+        margin-top: 5px;
+    }
+
+</style>
