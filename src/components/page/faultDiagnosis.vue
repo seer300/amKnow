@@ -33,6 +33,8 @@
                 </el-table>
             </el-row>
         </div>
+        <!-- 弹窗盒子 -->
+        <faultDialog v-bind:dialogShow="dialogShow" v-bind:faultPhenomenon="faultPhenomenon"></faultDialog>
     </div>
 </template>
 
@@ -40,8 +42,10 @@
 import faultDialog from "@/components/common/faultDialog";
 
 export default {
-
-
+    // 当前页面组件用到的子组件
+    components: {
+        faultDialog
+    },
     data() {
         return {
             // 用户输入描述
@@ -97,7 +101,13 @@ export default {
                     date: "2024-01-03",
                     desc: "空调异味，空调滤芯污染"
                 }
-            ]
+            ],
+            // 弹窗是否展示
+            dialogShow: false,
+            // 用户点击查看详情时，选择的案例数据
+            caseDetails: {},
+            // 可能存在的一并故障现象
+            faultPhenomenon: []
         }
     },
     // 业务函数集
@@ -107,11 +117,50 @@ export default {
             console.log(this.textarea);
 
             // 请求服务器，发送描述
- 
 
+            // 获取可能存在的一并故障现象，并弹窗让用户选择
+            this.faultPhenomenon.push({
+                faultText: "发动机异响",
+                isSelect: false
+            });
+            this.faultPhenomenon.push({
+                faultText: "机油灯警告",
+                isSelect: false
+            });
+            this.faultPhenomenon.push({
+                faultText: "车身异响",
+                isSelect: false
+            });
+            this.faultPhenomenon.push({
+                faultText: "漏油",
+                isSelect: false
+            });
+            this.faultPhenomenon.push({
+                faultText: "无法启动",
+                isSelect: false
+            });
+            this.faultPhenomenon.push({
+                faultText: "水箱温度过高",
+                isSelect: false
+            });
+
+            console.log(this.faultPhenomenon);
+
+            this.dialogShow = true;
+        },
+        // 用户取消选择故障现象
+        closeDialog(){
+            this.dialogShow = false;
+            this.faultPhenomenon = [];
+        },
+        // 用户选择完故障现象点击确定
+        confirmDialog(){
+            
+            // 关闭弹窗
+            this.closeDialog();
             // 修改resultDescription,显示结果描述
-
             this.resultdiv = true;
+            this.faultPhenomenon = [];
         }
     }
 }
