@@ -3,35 +3,35 @@
         <el-row :gutter="10" style="height: 130px;margin-top: 5px;">
             <el-col :span="4">
                 <div class="datadiv">
-                    <div>86</div>
-                    <div>当日故障数</div>
+                    <div class="data-value">86</div>
+                    <div class="data-illustrate">当日故障数</div>
                 </div>
             </el-col>
             <el-col :span="4">
                 <div class="datadiv">
-                    <div>34</div>
-                    <div>三个月重大故障数</div>
+                    <div class="data-value">34</div>
+                    <div class="data-illustrate">三个月重大故障数</div>
                 </div>
             </el-col>
             <el-col :span="4">
                 <div class="datadiv">
-                    <div>10%</div>
-                    <div>重大故障率</div>
+                    <div class="data-value">10%</div>
+                    <div class="data-illustrate">重大故障率</div>
                 </div>
             </el-col>
             <el-col :span="4">
                 <div class="datadiv">
-                    <div>10%</div>
-                    <div>车型保有量</div>
+                    <div class="data-value">1457</div>
+                    <div class="data-illustrate">车型保有量</div>
                 </div>
             </el-col>
             <el-col :span="4"><div class="datadiv">
-                <div>5</div>
-                <div>平均故障车龄</div>
+                <div class="data-value">5</div>
+                <div class="data-illustrate">平均故障车龄</div>
             </div></el-col>
             <el-col :span="4"><div class="datadiv">
-                <div>779</div>
-                <div>平均故障里程数</div>
+                <div class="data-value">2567</div>
+                <div class="data-illustrate">平均故障里程数</div>
             </div></el-col>
         </el-row>
         <!-- 故障数量走势图 -->
@@ -68,6 +68,8 @@
                 <div class="barChart" id="pie-Chart"></div>
             </el-col>
         </el-row>
+        <!-- 弹窗标签 -->
+        <CaseDialog :isShow="dialogShow" :caseDetails="caseDetails"></CaseDialog>
     </div>
 </template>
 
@@ -76,6 +78,10 @@ import echarts from "echarts";
 import CaseDialog from "@/components/common/CaseDialog";
 
 export default {
+    // 当前页面组件用到的子组件
+    components: {
+        CaseDialog
+    },
     data() {
         return {
             // 表格数据数组
@@ -101,8 +107,12 @@ export default {
                     faultySystem: "发动机",
                     faultyDesc: "发动机积碳严重"
                 }
-            ]
-                
+            ],
+            // 弹窗是否展示
+            dialogShow: false,
+            // 用户点击查看详情时，选择的案例数据
+            caseDetails: {},
+            
         }
     },
     // 组件挂载生命周期函数
@@ -136,7 +146,7 @@ export default {
             this.chartColumn.setOption(option);
 
             // 故障-车型分布 条形图绘制
-            var o1 = option = {
+            var o1 = {
                 // 图表标题配置
                 title:{
                     // 主标题文本，支持使用 \n 换行
@@ -144,7 +154,7 @@ export default {
                 },
                 xAxis: {
                     type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    data: ['大众', '日产', '本田', '宝马', '奔驰', '奥迪', '特斯拉']
                 },
                 yAxis: {
                     type: 'value'
@@ -157,10 +167,10 @@ export default {
                 ]
             };
             this.o1chart = echarts.init(document.getElementById("bar-Chart"));
-            this.o1chart.setOption(option);
+            this.o1chart.setOption(o1);
 
             // 故障件热点分析 饼图绘制
-            var o2 = option = {
+            var o2 = {
                 // 图表标题配置
                 title:{
                     // 主标题文本，支持使用 \n 换行
@@ -171,7 +181,7 @@ export default {
                 },
                 legend: {
                     orient: 'horizontal',
-                    left: 'center'
+                    left: 'right'
                 },
                 series: [
                     {
@@ -179,11 +189,11 @@ export default {
                         type: 'pie',
                         radius: '50%',
                         data: [
-                            { value: 1048, name: 'Search Engine' },
-                            { value: 735, name: 'Direct' },
-                            { value: 580, name: 'Email' },
-                            { value: 484, name: 'Union Ads' },
-                            { value: 300, name: 'Video Ads' }
+                            { value: 1048, name: '发动机' },
+                            { value: 735, name: '轮胎' },
+                            { value: 580, name: '变速箱' },
+                            { value: 484, name: '车身蒙皮' },
+                            { value: 300, name: '悬挂' }
                         ],
                         emphasis: {
                             itemStyle: {
@@ -196,7 +206,17 @@ export default {
                 ]
             };
             this.o2chart = echarts.init(document.getElementById("pie-Chart"));
-            this.o2chart.setOption(option);
+            this.o2chart.setOption(o2);
+        },
+        showDetails(rowdata){
+            // 展示弹窗
+            this.dialogShow = true;
+            // 修改用户指定的数据
+            this.caseDetails = rowdata;
+        },
+        // 用户关闭查看案例弹窗
+        closeDialog(){
+            this.dialogShow = false;
         }
     }
 }
@@ -205,13 +225,23 @@ export default {
 <!-- scoped代表这些CSS规则只在当前文件生效 -->
 <style scoped>
     .datadiv{
-        background-color: aquamarine;
+        background-color: #f6db63;
+        border-radius: 10px;
         height: 100px;
         margin-top: 14px;
         text-align: center;
         display: flex;
         flex-direction: column;
         justify-content: center;
+    }
+    /* 数据值的样式 */
+    .data-value{
+        color: #ea330d;
+        font-size: xx-large;
+    }
+    .data-illustrate{
+        color: #4c2826;
+        font-size: medium;
     }
 
     .trendChart{
