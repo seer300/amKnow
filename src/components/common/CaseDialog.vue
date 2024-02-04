@@ -43,7 +43,7 @@ export default {
         // 用户关闭窗口
         closeWin(){
             // 调用父级组件关闭方法
-            this.$parent.closeDialog();
+            this.$parent.closeCaseDialog();
         }
     }
 };

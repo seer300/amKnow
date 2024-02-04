@@ -8,15 +8,15 @@
         <span v-for="item in faultPhenomenon1" style="margin: 10px;">
             <el-checkbox v-model="item.isSelect" :label="item.faultText" border size="medium"></el-checkbox>
         </span>
+        <el-divider></el-divider>
         <div>
             <el-input
                 type="textarea"
                 autosize
-                placeholder="其他现象，请输入"
-                v-model="textarea1">
+                placeholder="其他现象，请简洁描述"
+                v-model="orderDesc">
             </el-input>
         </div>
-
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="confirmWin">确认</el-button>
             <el-button type="primary" @click="closeWin">取消</el-button>
@@ -37,7 +37,7 @@ export default {
             // 拷贝一份来自父组件的数据，本地更新后再赋值给父组件
             faultPhenomenon1: this.faultPhenomenon,
             // 用户输入的其他现象描述
-            textarea1: null
+            orderDesc: null
         };
     },
     methods: {

@@ -22,12 +22,12 @@
             <el-row class="row-class">
                 <h3>相似案例：</h3>
                 <el-table :data="caseDatas" style="width: 100%" height="300">
-                    <el-table-column prop="name" label="案例名称" width="180"></el-table-column>
+                    <el-table-column prop="id" label="案例名称" width="180"></el-table-column>
                     <el-table-column prop="date" label="日期"></el-table-column>
                     <el-table-column prop="desc" label="故障描述"></el-table-column>
                     <el-table-column fixed="right" label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">查看案例</el-button>
+                            <el-button @click="showDetails(scope.row)" type="text">查看案例</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -35,16 +35,19 @@
         </div>
         <!-- 弹窗盒子 -->
         <faultDialog v-bind:dialogShow="dialogShow" v-bind:faultPhenomenon="faultPhenomenon"></faultDialog>
+        <CaseDialog :isShow="caseDialogShow" :caseDetails="caseDetails"></CaseDialog>
     </div>
 </template>
 
 <script>
 import faultDialog from "@/components/common/faultDialog";
+import CaseDialog from "@/components/common/CaseDialog";
 
 export default {
     // 当前页面组件用到的子组件
     components: {
-        faultDialog
+        faultDialog,
+        CaseDialog
     },
     data() {
         return {
@@ -57,53 +60,31 @@ export default {
             // 相似案例数据,服务器返回
             caseDatas: [
                 {
-                    name: "案例1",
+                    id: "案例1",
+                    series: "大众",
+                    model: "宝来",
                     date: "2024-01-01",
                     desc: "发动机故障，冷却油缺少"
                 },
                 {
-                    name: "案例2",
+                    id: "案例2",
+                    series: "大众",
+                    model: "宝来",
                     date: "2024-01-02",
                     desc: "刹车故障，刹车盘磨损严重"
                 },
                 {
-                    name: "案例3",
-                    date: "2024-01-03",
-                    desc: "空调异味，空调滤芯污染"
-                },
-                {
-                    name: "案例4",
-                    date: "2024-01-01",
-                    desc: "发动机故障，冷却油缺少"
-                },
-                {
-                    name: "案例5",
-                    date: "2024-01-02",
-                    desc: "刹车故障，刹车盘磨损严重"
-                },
-                {
-                    name: "案例6",
-                    date: "2024-01-03",
-                    desc: "空调异味，空调滤芯污染"
-                },
-                {
-                    name: "案例1",
-                    date: "2024-01-01",
-                    desc: "发动机故障，冷却油缺少"
-                },
-                {
-                    name: "案例2",
-                    date: "2024-01-02",
-                    desc: "刹车故障，刹车盘磨损严重"
-                },
-                {
-                    name: "案例3",
+                    id: "案例3",
+                    series: "大众",
+                    model: "宝来",
                     date: "2024-01-03",
                     desc: "空调异味，空调滤芯污染"
                 }
             ],
-            // 弹窗是否展示
+            // 故障选择弹窗是否展示
             dialogShow: false,
+            // 案例详情弹窗是否展示
+            caseDialogShow: false,
             // 用户点击查看详情时，选择的案例数据
             caseDetails: {},
             // 可能存在的一并故障现象
@@ -161,6 +142,20 @@ export default {
             // 修改resultDescription,显示结果描述
             this.resultdiv = true;
             this.faultPhenomenon = [];
+        },
+        // 用户点击查看案例的调用函数
+        showDetails(rowdata){
+            // 展示弹窗
+            this.caseDialogShow = true;
+            // 修改用户指定的数据
+            this.caseDetails = rowdata;
+
+        },
+        // 用户关闭查看案例弹窗
+        closeCaseDialog(){
+            this.caseDialogShow = false;
+            // 修改用户指定的数据
+            this.caseDetails = {};
         }
     }
 }

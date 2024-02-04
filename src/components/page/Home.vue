@@ -215,7 +215,7 @@ export default {
             this.caseDetails = rowdata;
         },
         // 用户关闭查看案例弹窗
-        closeDialog(){
+        closeCaseDialog(){
             this.dialogShow = false;
         }
     }
