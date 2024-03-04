@@ -34,6 +34,21 @@
                 <div class="data-illustrate">平均故障里程数</div>
             </div></el-col>
         </el-row>
+        <!-- 故障年份选择器 -->
+        <el-row>
+            <el-col :span="12">
+                <div style="font-size: large;font-weight: bold;color: black;">每月故障走势图</div>
+            </el-col>
+            <el-col :span="12">
+                <el-select v-model="selectYear" placeholder="请选择年份" style="float: right;">
+                    <el-option
+                        v-for="(item, index) in years"
+                        :key="index"
+                        :value="item">
+                    </el-option>
+                </el-select>
+            </el-col>
+        </el-row>
         <!-- 故障数量走势图 -->
         <el-row>
             <el-col :span="24">
@@ -42,7 +57,7 @@
         </el-row>
         <!-- 热点故障表格 -->
         <el-row>
-            <p>热点解决方案</p>
+            <p style="font-size: large;font-weight: bold;color: black;">热点解决方案</p>
             <el-col :span="24">
                 <el-table :data="tableData" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
                 highlight-current-row height="220" style="border:1px solid #dfe6ec;">
@@ -54,6 +69,7 @@
                     <el-table-column label="操作" fixed="right">
                         <template slot-scope="scope">
                             <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
+                            <el-link type="primary" @click="collectionCase(scope.row)" style="margin-left: 8px;">收藏</el-link>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -112,7 +128,10 @@ export default {
             dialogShow: false,
             // 用户点击查看详情时，选择的案例数据
             caseDetails: {},
-            
+            // 年份选择数组
+            years: [ 2024,2023,2022 ],
+            // 用户选择的年份
+            selectYear: null,
         }
     },
     // 组件挂载生命周期函数
@@ -124,13 +143,9 @@ export default {
         drawCharts(){
             var option = option = {
                 // 图表标题配置
-                title:{
-                    // 主标题文本，支持使用 \n 换行
-                    text: "故障走势图"
-                },
                 xAxis: {
                     type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月']
                 },
                 yAxis: {
                     type: 'value'
@@ -217,6 +232,10 @@ export default {
         // 用户关闭查看案例弹窗
         closeCaseDialog(){
             this.dialogShow = false;
+        },
+        // 用户收藏案例
+        collectionCase(rowdata){
+            alert("收藏成功！");
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <el-dialog 
-        title="案例信息"
+        title="故障案例"
         :visible="isShow"
         @close="closeWin"
     >
