@@ -13,6 +13,14 @@
                 <div id="chartLine" class="chart-style"></div>
             </el-col>
         </el-row>
+        <el-row>
+            <el-col :span="12">
+                <div id="chart-Pie-rose" class="chart-style" style="height: 600px;"></div>
+            </el-col>
+            <el-col :span="12">
+                <div id="chart-Pie-2" class="chart-style" style="height: 600px;"></div>
+            </el-col>
+        </el-row>
     </div>
 </template>
 <script>
@@ -22,14 +30,16 @@ export default {
     data() {
         return {
             chartBar: null,
-            chartPie: null
+            chartPie: null,
+            chartPieRose: null,
+            chartPie2: null
         };
     },
 
     methods: {
         drawBarChart() {
             var option = {
-                title: { text: "库存量" },
+                title: { text: "车系-维修次数" },
                 tooltip: {},
                 xAxis: {
                     axisLabel: {
@@ -56,7 +66,7 @@ export default {
                 yAxis: {},
                 series: [
                     {
-                        name: "库存量",
+                        name: "维修次数",
                         type: "bar",
                         data: [13, 16, 24, 21, 8, 13, 3, 6, 9, 9, 2, 4, 5, 18, 3]
                     }
@@ -68,7 +78,7 @@ export default {
         drawPieChart() {
             var option = {
                 title: {
-                    text: "国家品牌数",
+                    text: "车型-维修次数",
                     x: "center"
                 },
                 tooltip: {
@@ -79,31 +89,31 @@ export default {
                     orient: "vertical",
                     left: "left",
                     data: [
-                        "中国",
-                        "德国",
-                        "美国",
-                        "法国",
-                        "意大利",
-                        "日本",
-                        "韩国",
-                        "其他"
+                        "朗逸",
+                        "卡罗拉",
+                        "捷达",
+                        "速腾",
+                        "汉兰达",
+                        "揽胜",
+                        "奔驰GLC",
+                        "五菱宏光"
                     ]
                 },
                 series: [
                     {
-                        name: "品牌数",
+                        name: "维修次数",
                         type: "pie",
                         radius: "55%",
                         center: ["50%", "60%"],
                         data: [
-                            { value: 1, name: "中国" },
-                            { value: 5, name: "德国" },
-                            { value: 3, name: "美国" },
-                            { value: 1, name: "法国" },
-                            { value: 1, name: "意大利" },
-                            { value: 3, name: "日本" },
-                            { value: 1, name: "韩国" },
-                            { value: 2, name: "其他" }
+                            { value: 5, name: "朗逸" },
+                            { value: 4, name: "卡罗拉" },
+                            { value: 10, name: "捷达" },
+                            { value: 8, name: "速腾" },
+                            { value: 6, name: "汉兰达" },
+                            { value: 3, name: "揽胜" },
+                            { value: 2, name: "奔驰GLC" },
+                            { value: 20, name: "五菱宏光" }
                         ],
                         itemStyle: {
                             emphasis: {
@@ -121,13 +131,13 @@ export default {
         drawLineChart() {
             var option = {
                 title: {
-                    text: "车型占有率"
+                    text: "行驶里程-维修次数"
                 },
                 tooltip: {
                     trigger: "axis"
                 },
                 legend: {
-                    data: ["轿车", "SUV", "MPV", "其他"]
+                    data: ["轿车", "SUV", "MPV"]
                 },
                 grid: {
                     left: "3%",
@@ -138,7 +148,7 @@ export default {
                 xAxis: {
                     type: "category",
                     boundaryGap: false,
-                    data: ["2012年", "2013年", "2014年", "2015年", "2016年", "2017年", "2018年"]
+                    data: ["1万公里", "3万公里", "5万公里", "8万公里", "10万公里", "15万公里", "20万公里"]
                 },
                 yAxis: {
                     type: "value"
@@ -147,30 +157,121 @@ export default {
                     {
                         name: "MPV",
                         type: "line",
-                        stack: "占有率",
-                        data: [0.1, 0.1, 0.11, 0.11, 0.13, 0.15, 0.2]
+                        stack: "平均故障次数",
+                        data: [1, 3, 5, 6, 10, 13, 18]
                     },
                     {
                         name: "SUV",
                         type: "line",
-                        stack: "占有率",
-                        data: [0.1, 0.09, 0.12, 0.13, 0.15, 0.19, 0.24]
+                        stack: "平均故障次数",
+                        data: [0.8, 2.56, 3.45, 5.5, 6.7, 9.5, 12.6]
                     },
                     {
                         name: "轿车",
                         type: "line",
-                        stack: "占有率",
-                        data: [0.3, 0.32, 0.35, 0.36, 0.4, 0.44, 0.46]
+                        stack: "平均故障次数",
+                        data: [0.3, 1.32, 3.35, 5.36, 8.4, 15.44, 18.46]
                     }
                 ]
             };
             this.chartLine = echarts.init(document.getElementById("chartLine"));
             this.chartLine.setOption(option);
         },
+        drawPieRoseChart(){
+            var option = {
+                    title: { text: "故障件占比" },
+                    legend: {
+                        top: 'bottom'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: { show: true },
+                            dataView: { show: true, readOnly: false },
+                            restore: { show: true },
+                            saveAsImage: { show: true }
+                        }
+                    },
+                    series: [
+                        {
+                        name: 'Nightingale Chart',
+                        type: 'pie',
+                        radius: [50, 250],
+                        center: ['50%', '50%'],
+                        roseType: 'area',
+                        itemStyle: {
+                            borderRadius: 8
+                        },
+                        data: [
+                            { value: 40, name: '发动机控制单元' },
+                            { value: 38, name: '节气门位置传感器' },
+                            { value: 32, name: '燃油泵' },
+                            { value: 30, name: '制动盘' },
+                            { value: 28, name: '点火线圈' },
+                            { value: 26, name: '轮胎' },
+                            { value: 22, name: '空气悬架' },
+                            { value: 18, name: '电池' }
+                        ]
+                        }
+                    ]
+                };
+            this.chartPieRose = echarts.init(document.getElementById("chart-Pie-rose"));
+            this.chartPieRose.setOption(option);
+        },
+        drawPie2Chart(){
+            var option = {
+                title: {
+                    text: "故障件-里程占比分布",
+                    x: "center"
+                },
+                tooltip: {
+                    trigger: "item",
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: "vertical",
+                    left: "left",
+                    data: [
+                        "5000公里以下",
+                        "5000~10000公里",
+                        "10000~15000公里",
+                        "15000~20000公里",
+                        "25000~30000公里",
+                        "30000公里以上",
+                    ]
+                },
+                series: [
+                    {
+                        name: "维修次数",
+                        type: "pie",
+                        radius: "55%",
+                        center: ["50%", "60%"],
+                        data: [
+                            { value: 15, name: "5000公里以下" },
+                            { value: 20, name: "5000~10000公里" },
+                            { value: 30, name: "15000~20000公里" },
+                            { value: 40, name: "25000~30000公里" },
+                            { value: 60, name: "30000公里以上" },
+                        ],
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: "rgba(0, 0, 0, 0.5)"
+                            }
+                        }
+                    }
+                ]
+            };
+            this.chartPie2 = echarts.init(document.getElementById("chart-Pie-2"));
+            this.chartPie2.setOption(option);
+        },
         drawCharts() {
             this.drawBarChart();
             this.drawPieChart();
             this.drawLineChart();
+            this.drawPieRoseChart();
+            this.drawPie2Chart();
         }
     },
     mounted: function () {
@@ -179,10 +280,6 @@ export default {
 };
 </script>
 <style scoped>
-.chart-container {
-    height: 600px;
-    overflow: auto;
-}
 
 .el-col {
     padding: 30px 20px;

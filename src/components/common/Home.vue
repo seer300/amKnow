@@ -60,7 +60,7 @@ export default {
           //一级
           entity: {
             id: "DB",
-            name: "Dashboard",
+            name: "维修案例数据分析",
             icon: "icon iconfont icon-viewgallery",
             path: "Dashboard"
           }

@@ -48,6 +48,7 @@
         <div v-show="isShowCollectTable">
             <!-- 操作框 -->
             <el-col :span="24" class="toolbar">
+                <el-button type="primary">按条件查询</el-button>
                 <el-button type="danger">移除案例</el-button>
             </el-col>
 
@@ -61,6 +62,18 @@
                 <el-table-column prop="model" label="车型" align="center"></el-table-column>
                 <el-table-column prop="faultySystem" label="故障系统" align="center"></el-table-column>
                 <el-table-column prop="faultyDesc" label="故障描述" align="center"></el-table-column>
+                <el-table-column
+                    prop="tag"
+                    label="标签"
+                    width="100"
+                    :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
+                    :filter-method="filterTag"
+                    filter-placement="bottom-end">
+                    <template slot-scope="scope">
+                        <el-tag :type="scope.row.tag === '家' ? 'primary' : 'success'" disable-transitions>{{scope.row.tag}}
+                        </el-tag>
+                    </template>
+                </el-table-column>
 
                 <el-table-column label="操作" fixed="right">
                     <template slot-scope="scope">
