@@ -15,19 +15,20 @@
         <div v-show="resultdiv">
             <!-- 分析结果内容框 -->
             <el-row class="row-class">
-                <h3>分析结果：</h3>
+                <h3>诊断结果为：</h3>
                 <div>{{ resultDescription }}</div>
             </el-row>
             <!-- 相似案例表格 -->
             <el-row class="row-class">
                 <h3>相似案例：</h3>
-                <el-table :data="caseDatas" style="width: 100%" height="300">
+                <el-table :data="caseDatas" style="width: 100%" height="400">
                     <el-table-column prop="id" label="案例名称" width="180"></el-table-column>
-                    <el-table-column prop="date" label="日期"></el-table-column>
-                    <el-table-column prop="desc" label="故障描述"></el-table-column>
-                    <el-table-column fixed="right" label="操作" width="100">
+                    <el-table-column prop="similarity" label="相似度"></el-table-column>
+                    <el-table-column prop="desc" label="故障原因"></el-table-column>
+                    <el-table-column fixed="right" label="操作" width="200">
                         <template slot-scope="scope">
                             <el-button @click="showDetails(scope.row)" type="text">查看案例</el-button>
+                            <el-button @click="showDetails(scope.row)" type="text">收藏案例</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -63,21 +64,21 @@ export default {
                     id: "案例1",
                     series: "大众",
                     model: "宝来",
-                    date: "2024-01-01",
+                    similarity: "88%",
                     desc: "发动机故障，冷却油缺少"
                 },
                 {
                     id: "案例2",
                     series: "大众",
                     model: "宝来",
-                    date: "2024-01-02",
+                    similarity: "78%",
                     desc: "刹车故障，刹车盘磨损严重"
                 },
                 {
                     id: "案例3",
                     series: "大众",
                     model: "宝来",
-                    date: "2024-01-03",
+                    similarity: "68%",
                     desc: "空调异味，空调滤芯污染"
                 }
             ],

@@ -1,11 +1,11 @@
 <template>
     <div>
-        <div>
-            <el-link type="primary">个人收藏案例</el-link>
+        <div style="margin-top: 10px;">
+            <el-button type="primary" plain @click="showCollectTable">{{ collectText }}</el-button>
         </div>
         <el-divider></el-divider>
-        <!-- 案例表格 -->
-        <div>
+        <!-- 全部案例表格 -->
+        <div v-show="!isShowCollectTable">
             <!-- 条件搜索框 -->
             <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
                 <el-form :inline="true" class="demo-form-inline">
@@ -20,7 +20,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item>
-                        <el-input v-model="dataFilter.keyword" placeholder="故障关键词"></el-input>
+                        <el-input v-model="dataFilter.keyword" placeholder="故障件"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="searchData">查询</el-button>
@@ -40,6 +40,31 @@
                     <template slot-scope="scope">
                         <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
                         <el-link type="primary" @click="">收藏</el-link>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <!-- 个人收藏案例表格 -->
+        <div v-show="isShowCollectTable">
+            <!-- 操作框 -->
+            <el-col :span="24" class="toolbar">
+                <el-button type="danger">移除案例</el-button>
+            </el-col>
+
+            <el-table :data="tableData" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+                highlight-current-row height="500" style="border:1px solid #dfe6ec;">
+                <!-- 多选头 -->
+                <el-table-column type="selection" width="55"></el-table-column>
+
+                <el-table-column type="index" label="ID" align="center"></el-table-column>
+                <el-table-column prop="series" label="车系" align="center"></el-table-column>
+                <el-table-column prop="model" label="车型" align="center"></el-table-column>
+                <el-table-column prop="faultySystem" label="故障系统" align="center"></el-table-column>
+                <el-table-column prop="faultyDesc" label="故障描述" align="center"></el-table-column>
+
+                <el-table-column label="操作" fixed="right">
+                    <template slot-scope="scope">
+                        <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
                     </template>
                 </el-table-column>
             </el-table>
@@ -114,7 +139,12 @@ export default {
                     faultySystem: "发动机",
                     faultyDesc: "发动机积碳严重"
                 }
-            ]
+            ],
+            // 用户点击个人收藏案例时，动态控制表格渲染情况
+            isShowCollectTable: false,
+            collectText: "查看个人收藏案例",
+            // 收藏案例数据
+            collectTableData: [],
         }
     },
     methods: {
@@ -136,6 +166,12 @@ export default {
         // 用户关闭查看案例弹窗
         closeCaseDialog(){
             this.dialogShow = false;
+        },
+        // 点击收藏案例按钮
+        showCollectTable(){
+            this.isShowCollectTable = !this.isShowCollectTable;
+            this.collectText = this.isShowCollectTable ? "查看全部案例" : "查看个人收藏案例";
+            
         }
     }
 }
