@@ -66,11 +66,12 @@
                     prop="tag"
                     label="标签"
                     width="100"
-                    :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
+                    :filters="[{ text: '发动机', value: '发动机' }, { text: '轮胎', value: '轮胎' }]"
                     :filter-method="filterTag"
                     filter-placement="bottom-end">
+
                     <template slot-scope="scope">
-                        <el-tag :type="scope.row.tag === '家' ? 'primary' : 'success'" disable-transitions>{{scope.row.tag}}
+                        <el-tag :type="scope.row.tag === '发动机' ? 'primary' : 'success'" disable-transitions>{{scope.row.tag}}
                         </el-tag>
                     </template>
                 </el-table-column>
@@ -78,6 +79,7 @@
                 <el-table-column label="操作" fixed="right">
                     <template slot-scope="scope">
                         <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
+                        <el-link type="primary" @click="">标签管理</el-link>
                     </template>
                 </el-table-column>
             </el-table>
@@ -122,35 +124,40 @@ export default {
                     series: "大众",
                     model: "捷达",
                     faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
+                    faultyDesc: "发动机积碳严重",
+                    tag: "发动机"
                 },
                 {
                     id: "02",
                     series: "大众",
                     model: "捷达",
                     faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
+                    faultyDesc: "发动机积碳严重",
+                    tag: "发动机"
                 },
                 {
                     id: "03",
                     series: "大众",
                     model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
+                    faultySystem: "轮胎",
+                    faultyDesc: "轮胎破损",
+                    tag: "轮胎"
                 },
                 {
                     id: "04",
                     series: "大众",
                     model: "捷达",
                     faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
+                    faultyDesc: "发动机积碳严重",
+                    tag: "发动机"
                 },
                 {
                     id: "05",
                     series: "大众",
                     model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
+                    faultySystem: "轮胎",
+                    faultyDesc: "轮胎破损",
+                    tag: "轮胎"
                 }
             ],
             // 用户点击个人收藏案例时，动态控制表格渲染情况
@@ -185,6 +192,21 @@ export default {
             this.isShowCollectTable = !this.isShowCollectTable;
             this.collectText = this.isShowCollectTable ? "查看全部案例" : "查看个人收藏案例";
             
+        },
+
+        // 表格用函数
+        clearFilter() {
+            this.$refs.filterTable.clearFilter();
+        },
+        formatter(row, column) {
+            return row.address;
+        },
+        filterTag(value, row) {
+            return row.tag === value;
+        },
+        filterHandler(value, row, column) {
+            const property = column['property'];
+            return row[property] === value;
         }
     }
 }
