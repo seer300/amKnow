@@ -3,6 +3,54 @@
     <div>
         <el-row class="row-class">
             <el-col :span="24">
+                品牌：
+                <el-select v-model="selCarSeries" filterable placeholder="请选择">
+                    <el-option
+                    v-for="(value,index) in carSeries"
+                    :key="index"
+                    :label="value"
+                    :value="value">
+                    </el-option>
+                </el-select>
+                车型：
+                <el-select v-model="selCarModel" filterable placeholder="请选择">
+                    <el-option
+                    v-for="(value,index) in carModel"
+                    :key="index"
+                    :label="value"
+                    :value="value">
+                    </el-option>
+                </el-select>
+                行驶里程：
+                <el-select v-model="selfaultKM" filterable placeholder="请选择">
+                    <el-option
+                    v-for="(value,index) in faultKM"
+                    :key="index"
+                    :label="value"
+                    :value="value">
+                    </el-option>
+                </el-select>
+                车龄：
+                <el-select v-model="value" filterable placeholder="请选择">
+                    <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                </el-select>
+                故障件：
+                <el-select v-model="value" filterable placeholder="请选择">
+                    <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                </el-select>
+
+            </el-col>
+            <el-col :span="24">
                 <!-- 案例输入框 -->
                 <el-input type="textarea" :rows="8" placeholder="请描述你遇到的问题" v-model="textarea"></el-input>
             </el-col>
@@ -81,6 +129,34 @@ export default {
                     similarity: "68%",
                     desc: "空调异味，空调滤芯污染"
                 }
+            ],
+            //故障里程选择
+            faultKM: [
+                "5000公里以下",
+                "5000~10000公里",
+                "10000~15000公里",
+                "15000~20000公里",
+                "25000~30000公里",
+                "30000公里以上",
+            ],
+            selfaultKM: null,
+            selCarSeries: null,
+            selCarModel: null,
+            carSeries: [
+                "奥迪",
+                "宝马",
+                "奔驰",
+                "日产",
+                "大众",
+                "福特",
+            ],
+            carModel: [
+                "大众途观",
+                "奥迪A4",
+                "奔驰C级",
+                "日产天籁",
+                "丰田RAV4",
+                "宝马3系"
             ],
             // 故障选择弹窗是否展示
             dialogShow: false,
