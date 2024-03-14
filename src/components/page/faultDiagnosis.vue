@@ -2,9 +2,8 @@
 <template>
     <div>
         <el-row class="row-class">
-            <el-col :span="24">
-                品牌：
-                <el-select v-model="selCarSeries" filterable placeholder="请选择">
+            <el-col :span="18">
+                <el-select v-model="selCarSeries" filterable placeholder="请选择品牌">
                     <el-option
                     v-for="(value,index) in carSeries"
                     :key="index"
@@ -12,8 +11,7 @@
                     :value="value">
                     </el-option>
                 </el-select>
-                车型：
-                <el-select v-model="selCarModel" filterable placeholder="请选择">
+                <el-select v-model="selCarModel" filterable placeholder="请选择车型">
                     <el-option
                     v-for="(value,index) in carModel"
                     :key="index"
@@ -21,8 +19,7 @@
                     :value="value">
                     </el-option>
                 </el-select>
-                行驶里程：
-                <el-select v-model="selfaultKM" filterable placeholder="请选择">
+                <el-select v-model="selfaultKM" filterable placeholder="请选择行驶里程">
                     <el-option
                     v-for="(value,index) in faultKM"
                     :key="index"
@@ -30,8 +27,7 @@
                     :value="value">
                     </el-option>
                 </el-select>
-                车龄：
-                <el-select v-model="value" filterable placeholder="请选择">
+                <el-select v-model="value" filterable placeholder="请选择车龄">
                     <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -39,8 +35,7 @@
                     :value="item.value">
                     </el-option>
                 </el-select>
-                故障件：
-                <el-select v-model="value" filterable placeholder="请选择">
+                <el-select v-model="value" filterable placeholder="请选择故障件">
                     <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -49,15 +44,29 @@
                     </el-option>
                 </el-select>
 
-            </el-col>
-            <el-col :span="24">
                 <!-- 案例输入框 -->
                 <el-input type="textarea" :rows="8" placeholder="请描述你遇到的问题" v-model="textarea"></el-input>
+                <el-button type="primary" @click="submitDescribe">开始分析</el-button>
             </el-col>
-        </el-row>
-        <!-- 提交按钮 -->
-        <el-row class="row-class">
-            <el-button type="primary" @click="submitDescribe">开始分析</el-button>
+            <!-- 热点表格 -->
+            <el-col :span="6">
+                <p>热点案例推荐</p>
+                <el-table :data="tableData" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+                highlight-current-row height="750" style="border:1px solid #dfe6ec;">
+                    <el-table-column type="index" label="ID" align="center"></el-table-column>
+                    <!-- <el-table-column prop="series" label="车系" align="center"></el-table-column> -->
+                    <!-- <el-table-column prop="model" label="车型" align="center"></el-table-column> -->
+                    <el-table-column prop="faultySystem" label="故障系统" align="center"></el-table-column>
+                    <!-- <el-table-column prop="faultyDesc" label="故障描述" align="center"></el-table-column> -->
+                    <el-table-column label="操作" fixed="right">
+                        <template slot-scope="scope">
+                            <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
+                            <el-link type="primary" @click="collectionCase(scope.row)" style="margin-left: 8px;">收藏</el-link>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>            
+
         </el-row>
         <!-- 显示控制盒子 -->
         <div v-show="resultdiv">
@@ -165,7 +174,30 @@ export default {
             // 用户点击查看详情时，选择的案例数据
             caseDetails: {},
             // 可能存在的一并故障现象
-            faultPhenomenon: []
+            faultPhenomenon: [],
+            tableData: [
+                {
+                    id: "01",
+                    series: "大众",
+                    model: "捷达",
+                    faultySystem: "发动机",
+                    faultyDesc: "发动机积碳严重"
+                },
+                {
+                    id: "02",
+                    series: "大众",
+                    model: "捷达",
+                    faultySystem: "发动机",
+                    faultyDesc: "发动机积碳严重"
+                },
+                {
+                    id: "03",
+                    series: "大众",
+                    model: "捷达",
+                    faultySystem: "发动机",
+                    faultyDesc: "发动机积碳严重"
+                }
+            ],
         }
     },
     // 业务函数集
@@ -245,5 +277,4 @@ export default {
 .resultdiv{
     height: 200px;
 }
-
 </style>
