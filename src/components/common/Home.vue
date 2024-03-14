@@ -28,7 +28,7 @@ export default {
         {
           entity: {
             id: "HE",
-            name: "首页",
+            name: "故障数据统计与分析",
             // icon图标定义
             icon: "icon iconfont el-icon-connection",
             // 跳转路径

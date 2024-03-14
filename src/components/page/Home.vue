@@ -35,7 +35,7 @@
             </div></el-col>
         </el-row>
         <!-- 故障年份选择器 -->
-        <el-row>
+        <!-- <el-row>
             <el-col :span="12">
                 <div style="font-size: large;font-weight: bold;color: black;">每月故障走势图</div>
             </el-col>
@@ -48,15 +48,15 @@
                     </el-option>
                 </el-select>
             </el-col>
-        </el-row>
+        </el-row> -->
         <!-- 故障数量走势图 -->
         <el-row>
             <el-col :span="24">
-                <div class="trendChart" id="trend-Chart"></div>
+                <div class="trendChart" id="chartBar"></div>
             </el-col>
         </el-row>
         <!-- 热点故障表格 -->
-        <el-row>
+        <!-- <el-row>
             <p style="font-size: large;font-weight: bold;color: black;">热点解决方案</p>
             <el-col :span="24">
                 <el-table :data="tableData" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
@@ -74,7 +74,7 @@
                     </el-table-column>
                 </el-table>
             </el-col>
-        </el-row>
+        </el-row> -->
         <!-- 故障条形图 饼图 -->
         <el-row style="margin-top: 10px;">
             <el-col :span="12">
@@ -84,8 +84,16 @@
                 <div class="barChart" id="pie-Chart"></div>
             </el-col>
         </el-row>
+        <el-row style="margin-top: 10px;">
+            <el-col :span="12">
+                <div class="barChart" id="bar-Chart-2"></div>
+            </el-col>
+            <el-col :span="12">
+                <div class="barChart" id="bar-Chart-3"></div>
+            </el-col>
+        </el-row>
         <!-- 弹窗标签 -->
-        <CaseDialog :isShow="dialogShow" :caseDetails="caseDetails"></CaseDialog>
+        <!-- <CaseDialog :isShow="dialogShow" :caseDetails="caseDetails"></CaseDialog> -->
     </div>
 </template>
 
@@ -138,34 +146,18 @@ export default {
     mounted: function () {
         // 开始绘制图表
         this.drawCharts();
+        this.drawBarChart();
+        this.drawBarChart23();
     },
     methods: {
         drawCharts(){
-            var option = option = {
-                // 图表标题配置
-                xAxis: {
-                    type: 'category',
-                    data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月']
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [
-                    {
-                        data: [150, 230, 224, 218, 135, 147, 260],
-                        type: 'line'
-                    }
-                ]
-            };
-            this.chartColumn = echarts.init(document.getElementById("trend-Chart"));
-            this.chartColumn.setOption(option);
 
             // 故障-车型分布 条形图绘制
             var o1 = {
                 // 图表标题配置
                 title:{
                     // 主标题文本，支持使用 \n 换行
-                    text: "故障-车型分布"
+                    text: "车型与故障率"
                 },
                 xAxis: {
                     type: 'category',
@@ -189,7 +181,7 @@ export default {
                 // 图表标题配置
                 title:{
                     // 主标题文本，支持使用 \n 换行
-                    text: "故障件热点分析"
+                    text: "故障件与更换"
                 },
                 tooltip: {
                     trigger: 'item'
@@ -222,6 +214,93 @@ export default {
             };
             this.o2chart = echarts.init(document.getElementById("pie-Chart"));
             this.o2chart.setOption(o2);
+        },
+        drawBarChart() {
+            var option = {
+                title: { text: "故障类型与频率" },
+                tooltip: {},
+                xAxis: {
+                    axisLabel: {
+                        interval: 0
+                    },
+                    data: [
+                        "朗逸",
+                        "卡罗拉",
+                        "捷达",
+                        "速腾",
+                        "汉兰达",
+                        "本田CR-V",
+                        "揽胜",
+                        "奔驰GLC",
+                        "RAV4荣放",
+                        "奥德赛",
+                        "保时捷911",
+                        "日产GT-R",
+                        "索罗德",
+                        "五菱宏光",
+                        "柯斯达"
+                    ]
+                },
+                yAxis: {},
+                series: [
+                    {
+                        name: "维修次数",
+                        type: "bar",
+                        data: [13, 16, 24, 21, 8, 13, 3, 6, 9, 9, 2, 4, 5, 18, 3]
+                    }
+                ]
+            };
+            this.chartColumn = echarts.init(document.getElementById("chartBar"));
+            this.chartColumn.setOption(option);
+        },
+        drawBarChart23(){
+            // 故障-车型分布 条形图绘制
+            var c2 = {
+                // 图表标题配置
+                title:{
+                    // 主标题文本，支持使用 \n 换行
+                    text: "故障影响因素"
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['大众', '日产', '本田', '宝马', '奔驰', '奥迪', '特斯拉']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        data: [120, 200, 150, 80, 70, 110, 130],
+                        type: 'bar'
+                    }
+                ]
+            };
+            this.c2chart = echarts.init(document.getElementById("bar-Chart-2"));
+            this.c2chart.setOption(c2);
+
+            // 故障-车型分布 条形图绘制
+            var c3 = {
+                // 图表标题配置
+                title:{
+                    // 主标题文本，支持使用 \n 换行
+                    text: "故障类型统计"
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['大众', '日产', '本田', '宝马', '奔驰', '奥迪', '特斯拉']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        data: [120, 200, 150, 80, 70, 110, 130],
+                        type: 'bar'
+                    }
+                ]
+            };
+            this.c3chart = echarts.init(document.getElementById("bar-Chart-3"));
+            this.c3chart.setOption(c3);
         },
         showDetails(rowdata){
             // 展示弹窗
