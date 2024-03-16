@@ -47,6 +47,30 @@
                 <!-- 案例输入框 -->
                 <el-input type="textarea" :rows="8" placeholder="请描述你遇到的问题" v-model="textarea"></el-input>
                 <el-button type="primary" @click="submitDescribe">开始分析</el-button>
+
+                <!-- 显示控制盒子 -->
+                <div v-show="resultdiv">
+                    <!-- 分析结果内容框 -->
+                    <el-row class="row-class">
+                        <h3>诊断结果为：</h3>
+                        <div>{{ resultDescription }}</div>
+                    </el-row>
+                    <!-- 相似案例表格 -->
+                    <el-row class="row-class">
+                        <h3>相似案例：</h3>
+                        <el-table :data="caseDatas" style="width: 100%" height="400">
+                            <el-table-column prop="id" label="案例名称" width="180"></el-table-column>
+                            <el-table-column prop="similarity" label="相似度"></el-table-column>
+                            <el-table-column prop="desc" label="故障原因"></el-table-column>
+                            <el-table-column fixed="right" label="操作" width="200">
+                                <template slot-scope="scope">
+                                    <el-button @click="showDetails(scope.row)" type="text">查看案例</el-button>
+                                    <el-button @click="showDetails(scope.row)" type="text">收藏案例</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-row>
+                </div>
             </el-col>
             <!-- 热点表格 -->
             <el-col :span="6">
@@ -56,8 +80,8 @@
                     <el-table-column type="index" label="ID" align="center"></el-table-column>
                     <!-- <el-table-column prop="series" label="车系" align="center"></el-table-column> -->
                     <!-- <el-table-column prop="model" label="车型" align="center"></el-table-column> -->
-                    <el-table-column prop="faultySystem" label="故障系统" align="center"></el-table-column>
-                    <!-- <el-table-column prop="faultyDesc" label="故障描述" align="center"></el-table-column> -->
+                    <!-- <el-table-column prop="faultySystem" label="故障系统" align="center"></el-table-column> -->
+                    <el-table-column prop="faultyDesc" label="故障描述" align="center"></el-table-column>
                     <el-table-column label="操作" fixed="right">
                         <template slot-scope="scope">
                             <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
@@ -68,29 +92,6 @@
             </el-col>            
 
         </el-row>
-        <!-- 显示控制盒子 -->
-        <div v-show="resultdiv">
-            <!-- 分析结果内容框 -->
-            <el-row class="row-class">
-                <h3>诊断结果为：</h3>
-                <div>{{ resultDescription }}</div>
-            </el-row>
-            <!-- 相似案例表格 -->
-            <el-row class="row-class">
-                <h3>相似案例：</h3>
-                <el-table :data="caseDatas" style="width: 100%" height="400">
-                    <el-table-column prop="id" label="案例名称" width="180"></el-table-column>
-                    <el-table-column prop="similarity" label="相似度"></el-table-column>
-                    <el-table-column prop="desc" label="故障原因"></el-table-column>
-                    <el-table-column fixed="right" label="操作" width="200">
-                        <template slot-scope="scope">
-                            <el-button @click="showDetails(scope.row)" type="text">查看案例</el-button>
-                            <el-button @click="showDetails(scope.row)" type="text">收藏案例</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-row>
-        </div>
         <!-- 弹窗盒子 -->
         <faultDialog v-bind:dialogShow="dialogShow" v-bind:faultPhenomenon="faultPhenomenon"></faultDialog>
         <CaseDialog :isShow="caseDialogShow" :caseDetails="caseDetails"></CaseDialog>
@@ -112,31 +113,31 @@ export default {
             // 用户输入描述
             textarea: '',
             // 分析结果
-            resultDescription: "发动机故障，冷却油缺少",
+            resultDescription: "发动机系统故障",
             // 结果区域显示控制
             resultdiv: false,
             // 相似案例数据,服务器返回
             caseDatas: [
                 {
-                    id: "案例1",
+                    id: "1",
                     series: "大众",
                     model: "宝来",
-                    similarity: "88%",
-                    desc: "发动机故障，冷却油缺少"
+                    similarity: "96%",
+                    desc: "发动机活塞环磨损，气缸壁磨损严重，导致气密性下降，影响了发动机的正常工作。"
                 },
                 {
-                    id: "案例2",
+                    id: "2",
                     series: "大众",
                     model: "宝来",
                     similarity: "78%",
-                    desc: "刹车故障，刹车盘磨损严重"
+                    desc: "制动系统泵体漏油，制动液位过低，影响了制动系统的正常工作"
                 },
                 {
-                    id: "案例3",
+                    id: "3",
                     series: "大众",
                     model: "宝来",
                     similarity: "68%",
-                    desc: "空调异味，空调滤芯污染"
+                    desc: "点火线路接触不良，导致发动机点火不稳定"
                 }
             ],
             //故障里程选择
@@ -188,14 +189,14 @@ export default {
                     series: "大众",
                     model: "捷达",
                     faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
+                    faultyDesc: "行驶中车辆抖动明显"
                 },
                 {
                     id: "03",
                     series: "大众",
                     model: "捷达",
                     faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
+                    faultyDesc: "发动机工作时排放出黑烟"
                 }
             ],
         }

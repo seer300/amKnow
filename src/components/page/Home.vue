@@ -174,7 +174,7 @@ export default {
                     formatter: "{a} <br/>{b} : {c} ({d}%)"
                 },
                 legend: {
-                    orient: 'horizontal',
+                    orient: 'vertical',
                     left: 'right'
                 },
                 series: [
@@ -184,12 +184,12 @@ export default {
                         radius: "55%",
                         center: ["50%", "60%"],
                         data: [
-                            { value: 5, name: "朗逸" },
-                            { value: 4, name: "卡罗拉" },
-                            { value: 10, name: "捷达" },
-                            { value: 8, name: "速腾" },
-                            { value: 6, name: "汉兰达" },
-                            { value: 20, name: "五菱宏光" }
+                            { value: 1676, name: "发动机系统故障" },
+                            { value: 1258, name: "传动系统故障" },
+                            { value: 980, name: "制动系统故障" },
+                            { value: 930, name: "电气系统故障" },
+                            { value: 1045, name: "燃油系统故障" },
+                            { value: 305, name: "其他系统故障" }
                         ],
                         itemStyle: {
                             emphasis: {
@@ -215,7 +215,7 @@ export default {
                     trigger: 'item'
                 },
                 legend: {
-                    orient: 'horizontal',
+                    orient: 'vertical',
                     left: 'right'
                 },
                 series: [
@@ -224,11 +224,11 @@ export default {
                         type: 'pie',
                         radius: '50%',
                         data: [
-                            { value: 1048, name: '发动机' },
-                            { value: 735, name: '轮胎' },
-                            { value: 580, name: '变速箱' },
-                            { value: 484, name: '车身蒙皮' },
-                            { value: 300, name: '悬挂' }
+                            { value: 1048, name: '汽缸' },
+                            { value: 735, name: '活塞' },
+                            { value: 580, name: '曲轴' },
+                            { value: 484, name: '水泵' },
+                            { value: 300, name: '火花塞' }
                         ],
                         emphasis: {
                             itemStyle: {
@@ -302,7 +302,7 @@ export default {
                 xAxis: {
                     type: "category",
                     boundaryGap: false,
-                    data: ["1万公里", "3万公里", "5万公里", "8万公里", "10万公里", "15万公里", "20万公里"]
+                    data: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
                 },
                 yAxis: {
                     type: "value"
@@ -311,8 +311,8 @@ export default {
                     {
                         name: "轿车",
                         type: "line",
-                        stack: "平均故障次数",
-                        data: [1, 3, 5, 6, 10, 13, 18]
+                        stack: "故障数量",
+                        data: [100, 150, 80, 120, 180, 200, 140,160,110,90,130,170]
                     },
                 ]
             };
@@ -328,14 +328,14 @@ export default {
                 },
                 xAxis: {
                     type: 'category',
-                    data: ['大众', '日产', '本田', '宝马', '奔驰', '奥迪', '特斯拉']
+                    data: ['北京', '上海', '广东', '四川', '陕西', '黑龙江', '江苏']
                 },
                 yAxis: {
                     type: 'value'
                 },
                 series: [
                     {
-                        data: [120, 200, 150, 80, 70, 110, 130],
+                        data: [250, 220, 120, 80, 70, 160, 220],
                         type: 'bar'
                     }
                 ]

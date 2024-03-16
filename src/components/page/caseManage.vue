@@ -31,7 +31,7 @@
             <el-table :data="tableData" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
                 highlight-current-row height="500" style="border:1px solid #dfe6ec;">
                 <el-table-column type="index" label="ID" align="center"></el-table-column>
-                <el-table-column prop="series" label="车系" align="center"></el-table-column>
+                <!-- <el-table-column prop="series" label="车系" align="center"></el-table-column> -->
                 <el-table-column prop="model" label="车型" align="center"></el-table-column>
                 <el-table-column prop="faultySystem" label="故障系统" align="center"></el-table-column>
                 <el-table-column prop="faultyDesc" label="故障描述" align="center"></el-table-column>
@@ -121,42 +121,66 @@ export default {
             tableData: [
                 {
                     id: "01",
-                    series: "大众",
-                    model: "捷达",
+                    series: "奥迪",
+                    model: "奥迪",
                     faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重",
+                    faultyDesc: "车辆行驶中发动机怠速不稳，加速无力，排气管冒黑烟。",
                     tag: "发动机"
                 },
                 {
                     id: "02",
                     series: "大众",
-                    model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重",
+                    model: "丰田",
+                    faultySystem: "制动系统",
+                    faultyDesc: "刹车踏板下沉感明显，刹车时刹车盘发出嘎嘎声",
                     tag: "发动机"
                 },
                 {
                     id: "03",
                     series: "大众",
-                    model: "捷达",
-                    faultySystem: "轮胎",
-                    faultyDesc: "轮胎破损",
+                    model: "大众",
+                    faultySystem: "空调系统",
+                    faultyDesc: "车辆行驶中空调制冷效果不佳，出风口吹出热风",
                     tag: "轮胎"
                 },
                 {
                     id: "04",
                     series: "大众",
-                    model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重",
+                    model: "大众",
+                    faultySystem: "电气系统",
+                    faultyDesc: "车辆启动困难，仪表盘灯光闪烁，电瓶指示灯常亮。",
                     tag: "发动机"
                 },
                 {
                     id: "05",
-                    series: "大众",
-                    model: "捷达",
-                    faultySystem: "轮胎",
-                    faultyDesc: "轮胎破损",
+                    series: "福特",
+                    model: "福特",
+                    faultySystem: "燃油系统",
+                    faultyDesc: "加油后车辆行驶中出现加速困难，抖动明显。",
+                    tag: "轮胎"
+                },
+                {
+                    id: "06",
+                    series: "福特",
+                    model: "本田",
+                    faultySystem: "冷却系统",
+                    faultyDesc: "车辆行驶中发动机温度过高，冷却液泄漏",
+                    tag: "轮胎"
+                },
+                {
+                    id: "07",
+                    series: "福特",
+                    model: "丰田",
+                    faultySystem: "发动机系统",
+                    faultyDesc: "车辆启动时发动机故障灯亮起，失去动力。",
+                    tag: "轮胎"
+                },
+                {
+                    id: "08",
+                    series: "福特",
+                    model: "福特",
+                    faultySystem: "悬挂系统",
+                    faultyDesc: "行驶中悬挂异响，车身晃动明显。",
                     tag: "轮胎"
                 }
             ],
