@@ -101,6 +101,8 @@
 <script>
 import faultDialog from "@/components/common/faultDialog";
 import CaseDialog from "@/components/common/CaseDialog";
+// 引入 Axios
+import axios from 'axios';
 
 export default {
     // 当前页面组件用到的子组件
@@ -200,6 +202,17 @@ export default {
                 }
             ],
         }
+    },
+    mounted() {
+        // 发送 GET 请求到指定接口
+        axios.get('http://127.0.0.1:8081/test/test2').then(response => {
+            // 请求成功，将返回的 JSON 打印出来
+            console.log(response);
+            
+        }).catch(error => {
+            // 请求失败，打印错误信息
+            console.error('请求失败:', error);
+        });
     },
     // 业务函数集
     methods:{
