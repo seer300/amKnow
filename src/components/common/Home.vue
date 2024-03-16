@@ -48,23 +48,37 @@ export default {
         },
         {
           entity: {
-            id: "CM",
-            name: "案例管理",
+            id: "JS",
+            name: "技术支持",
             // icon图标定义
             icon: "icon iconfont el-icon-connection",
-            // 跳转路径
-            path: "caseManage"
-          }
+          },
+          childs: [
+            {
+              entity: {
+                id: "CM",
+                name: "案例管理",
+                // 跳转路径
+                path: "caseManage"
+              }
+            },
+            {
+              entity: {
+                id: "JSXX",
+                name: "技术学习",
+                path: "automobileBrandMng"
+              }
+            }
+          ]
         },
-        {
-          //一级
-          entity: {
-            id: "DB",
-            name: "维修案例数据分析",
-            icon: "icon iconfont icon-viewgallery",
-            path: "Dashboard"
-          }
-        }
+        // {
+        //   entity: {
+        //     id: "DB",
+        //     name: "维修案例数据分析",
+        //     icon: "icon iconfont icon-viewgallery",
+        //     path: "Dashboard"
+        //   }
+        // }
       ]
     };
   },

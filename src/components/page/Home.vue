@@ -86,6 +86,20 @@
         </el-row>
         <el-row style="margin-top: 10px;">
             <el-col :span="12">
+                <el-row>
+                    <el-col :span="12">
+                        <div style="font-size: large;font-weight: bold;color: black;">故障-时间</div>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-select v-model="selectYear" placeholder="请选择年份" style="float: right;">
+                            <el-option
+                                v-for="(item, index) in years"
+                                :key="index"
+                                :value="item">
+                            </el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
                 <div class="barChart" id="bar-Chart-2"></div>
             </el-col>
             <el-col :span="12">
@@ -151,25 +165,39 @@ export default {
     },
     methods: {
         drawCharts(){
-
-            // 故障-车型分布 条形图绘制
             var o1 = {
-                // 图表标题配置
-                title:{
-                    // 主标题文本，支持使用 \n 换行
-                    text: "车型与故障率"
+                title: {
+                    text: "故障类型与频率",
                 },
-                xAxis: {
-                    type: 'category',
-                    data: ['大众', '日产', '本田', '宝马', '奔驰', '奥迪', '特斯拉']
+                tooltip: {
+                    trigger: "item",
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
                 },
-                yAxis: {
-                    type: 'value'
+                legend: {
+                    orient: 'horizontal',
+                    left: 'right'
                 },
                 series: [
                     {
-                        data: [120, 200, 150, 80, 70, 110, 130],
-                        type: 'bar'
+                        name: "维修次数",
+                        type: "pie",
+                        radius: "55%",
+                        center: ["50%", "60%"],
+                        data: [
+                            { value: 5, name: "朗逸" },
+                            { value: 4, name: "卡罗拉" },
+                            { value: 10, name: "捷达" },
+                            { value: 8, name: "速腾" },
+                            { value: 6, name: "汉兰达" },
+                            { value: 20, name: "五菱宏光" }
+                        ],
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: "rgba(0, 0, 0, 0.5)"
+                            }
+                        }
                     }
                 ]
             };
@@ -217,7 +245,7 @@ export default {
         },
         drawBarChart() {
             var option = {
-                title: { text: "故障类型与频率" },
+                title: { text: "车型与故障率" },
                 tooltip: {},
                 xAxis: {
                     axisLabel: {
@@ -256,23 +284,36 @@ export default {
         drawBarChart23(){
             // 故障-车型分布 条形图绘制
             var c2 = {
-                // 图表标题配置
-                title:{
-                    // 主标题文本，支持使用 \n 换行
-                    text: "故障影响因素"
+                // title: {
+                //     text: "故障-时间"
+                // },
+                tooltip: {
+                    trigger: "axis"
+                },
+                // legend: {
+                //     data: ["轿车"]
+                // },
+                grid: {
+                    left: "3%",
+                    right: "4%",
+                    bottom: "3%",
+                    containLabel: true
                 },
                 xAxis: {
-                    type: 'category',
-                    data: ['大众', '日产', '本田', '宝马', '奔驰', '奥迪', '特斯拉']
+                    type: "category",
+                    boundaryGap: false,
+                    data: ["1万公里", "3万公里", "5万公里", "8万公里", "10万公里", "15万公里", "20万公里"]
                 },
                 yAxis: {
-                    type: 'value'
+                    type: "value"
                 },
                 series: [
                     {
-                        data: [120, 200, 150, 80, 70, 110, 130],
-                        type: 'bar'
-                    }
+                        name: "轿车",
+                        type: "line",
+                        stack: "平均故障次数",
+                        data: [1, 3, 5, 6, 10, 13, 18]
+                    },
                 ]
             };
             this.c2chart = echarts.init(document.getElementById("bar-Chart-2"));
@@ -283,7 +324,7 @@ export default {
                 // 图表标题配置
                 title:{
                     // 主标题文本，支持使用 \n 换行
-                    text: "故障类型统计"
+                    text: "故障-地区"
                 },
                 xAxis: {
                     type: 'category',
