@@ -64,6 +64,15 @@ export default new Router({
                     meta: {
                         keepAlive: true // 需要缓存
                     }
+                },
+                // 技术学习
+                {
+                    path: 'study',
+                    name: 'study',
+                    component: resolve => require(['@/components/page/Study'], resolve),
+                    meta: {
+                        keepAlive: true // 需要缓存
+                    }
                 }
             ]
         },

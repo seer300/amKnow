@@ -66,7 +66,7 @@ export default {
               entity: {
                 id: "JSXX",
                 name: "技术学习",
-                path: "automobileBrandMng"
+                path: "study"
               }
             }
           ]
