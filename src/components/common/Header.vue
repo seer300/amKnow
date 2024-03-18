@@ -14,7 +14,6 @@ export default {
   },
   store,
   mounted() {
-    this.image = JSON.parse(sessionStorage.getItem("userInf")).image;
   },
   computed: {
     getCollapse() {

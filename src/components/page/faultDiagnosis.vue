@@ -81,7 +81,7 @@
                     <!-- <el-table-column prop="series" label="车系" align="center"></el-table-column> -->
                     <!-- <el-table-column prop="model" label="车型" align="center"></el-table-column> -->
                     <!-- <el-table-column prop="faultySystem" label="故障系统" align="center"></el-table-column> -->
-                    <el-table-column prop="faultyDesc" label="故障描述" align="center"></el-table-column>
+                    <el-table-column prop="F_FaultDesc" label="故障描述" align="center"></el-table-column>
                     <el-table-column label="操作" fixed="right">
                         <template slot-scope="scope">
                             <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
@@ -178,37 +178,14 @@ export default {
             caseDetails: {},
             // 可能存在的一并故障现象
             faultPhenomenon: [],
-            tableData: [
-                {
-                    id: "01",
-                    series: "大众",
-                    model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
-                },
-                {
-                    id: "02",
-                    series: "大众",
-                    model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "行驶中车辆抖动明显"
-                },
-                {
-                    id: "03",
-                    series: "大众",
-                    model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "发动机工作时排放出黑烟"
-                }
-            ],
+            tableData: [],
         }
     },
     mounted() {
         // 发送 GET 请求到指定接口
-        axios.get('http://127.0.0.1:8081/test/test2').then(response => {
-            // 请求成功，将返回的 JSON 打印出来
-            console.log(response);
-            
+        axios.get('http://127.0.0.1:8081/api/fault/hot').then(response => {
+            // 获取案例数据，重新赋值数组
+            this.tableData = response.data;
         }).catch(error => {
             // 请求失败，打印错误信息
             console.error('请求失败:', error);
@@ -268,6 +245,7 @@ export default {
         },
         // 用户点击查看案例的调用函数
         showDetails(rowdata){
+            console.log("选择的数据",rowdata);
             // 展示弹窗
             this.caseDialogShow = true;
             // 修改用户指定的数据
