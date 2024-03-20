@@ -78,9 +78,6 @@
                 <el-table :data="tableData" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
                 highlight-current-row height="750" style="border:1px solid #dfe6ec;">
                     <el-table-column type="index" label="ID" align="center"></el-table-column>
-                    <!-- <el-table-column prop="series" label="车系" align="center"></el-table-column> -->
-                    <!-- <el-table-column prop="model" label="车型" align="center"></el-table-column> -->
-                    <!-- <el-table-column prop="faultySystem" label="故障系统" align="center"></el-table-column> -->
                     <el-table-column prop="F_FaultDesc" label="故障描述" align="center"></el-table-column>
                     <el-table-column label="操作" fixed="right">
                         <template slot-scope="scope">
@@ -182,8 +179,8 @@ export default {
         }
     },
     mounted() {
-        // 发送 GET 请求到指定接口
-        axios.get('http://127.0.0.1:8081/api/fault/hot').then(response => {
+        // 获取热点案例
+        axios.get('http://8.137.80.44:8081/api/fault/hot').then(response => {
             // 获取案例数据，重新赋值数组
             this.tableData = response.data;
         }).catch(error => {
