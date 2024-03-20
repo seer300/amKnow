@@ -131,22 +131,28 @@ export default {
         }
     },
     mounted() {
-        // 获取全部案例
-        axios.get('http://8.137.80.44:8081/api/fault/all').then(response => {
-            this.tableData = response.data;
-        }).catch(error => {
-            // 请求失败，打印错误信息
-            console.error('请求失败:', error);
-        });
-        // 获取个人收藏案例
-        axios.get('http://8.137.80.44:8081/api/fault/starlist').then(response => {
-            this.collectTableData = response.data;
-        }).catch(error => {
-            // 请求失败，打印错误信息
-            console.error('请求失败:', error);
-        });
+        this.refreshAllCase();
+        this.refreshStarCase();
     },
     methods: {
+        refreshAllCase(){
+            // 获取全部案例
+            axios.get('http://8.137.80.44:8081/api/fault/all').then(response => {
+                this.tableData = response.data;
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
+        },
+        refreshStarCase(){
+            // 获取个人收藏案例
+            axios.get('http://8.137.80.44:8081/api/fault/starlist').then(response => {
+                this.collectTableData = response.data;
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
+        },
         // 用户点击查看案例的调用函数
         showDetails(rowdata){
             // 展示弹窗
@@ -222,12 +228,7 @@ export default {
 
                 if (response.data == 1) {
                     alert("收藏成功！");
-                    axios.get('http://8.137.80.44:8081/api/fault/starlist').then(response => {
-                        this.collectTableData = response.data;
-                    }).catch(error => {
-                        // 请求失败，打印错误信息
-                        console.error('请求失败:', error);
-                    });
+                    this.refreshStarCase();
                 }else if (response.data == -1) {
                     alert("此案例已经收藏了！");
                 }
@@ -245,9 +246,10 @@ export default {
                 }
             }).then(response => {
                 if (response.data == 1) {
-                    alert("移出成功！");
+                    alert("移除成功！");
                     axios.get('http://8.137.80.44:8081/api/fault/starlist').then(response => {
                         this.collectTableData = response.data;
+                        this.refreshStarCase();
                     }).catch(error => {
                         // 请求失败，打印错误信息
                         console.error('请求失败:', error);
@@ -265,15 +267,32 @@ export default {
                 alert("至少选中一行数据！");
                 return;
             }
-
+            let i = this.selectedRows.length;
             for (const row of this.selectedRows) {
                 axios.get('http://8.137.80.44:8081/api/fault/delstarcase',{
                     params: {
                         F_PKId: row.F_PKId,
                     }
-                }).then(response => {});
+                }).then(response => {
+                    i = i - 1;
+                });
             }
-            alert("移除成功！");
+
+            let then = this;
+
+            const fun1 = function(){
+                setTimeout(function() {
+                    if (i > 0) {
+                        // 继续等待 递归调用
+                        fun1();
+                    }else{
+                        alert("移除成功！");
+                        then.refreshStarCase();
+                    }
+                }, 1000);
+            }
+
+            fun1();
         },
         handleSelect(selection, row) {
             // selection 是当前已选中的所有行的数组
