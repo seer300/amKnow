@@ -21,7 +21,7 @@
             <el-descriptions-item label="解决方案">{{ caseDetails.F_SolveFault }}</el-descriptions-item>
         </el-descriptions>
         <el-divider>案例评分</el-divider>
-        <el-rate v-model="v1" style="width: 125px;margin: 0 auto;"></el-rate>
+        <el-rate v-model="caseDetails.C_Review" style="width: 125px;margin: 0 auto;" @change="updateRate"></el-rate>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="closeWin">关闭</el-button>
         </div>
@@ -37,18 +37,17 @@ export default {
         caseDetails: Object
     },
     data() {
-        console.log("dialog:",this);
-
-        return {
-            // 案例评分
-
-        };
+        return {};
     },
     methods: {
         // 用户关闭窗口
         closeWin(){
             // 调用父级组件关闭方法
             this.$parent.closeCaseDialog();
+        },
+        // 用户修改评分 可能是修改或添加
+        updateRate(rate1){
+            this.$parent.updateRate(rate1);
         }
     }
 };

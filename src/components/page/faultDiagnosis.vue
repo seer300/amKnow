@@ -243,10 +243,24 @@ export default {
         // 用户点击查看案例的调用函数
         showDetails(rowdata){
             console.log("选择的数据",rowdata);
-            // 展示弹窗
-            this.caseDialogShow = true;
             // 修改用户指定的数据
             this.caseDetails = rowdata;
+            // 请求获取评分数据
+            axios.get('http://8.137.80.44:8081/api/grade/get',{
+                params: {
+                    fPkId: rowdata.F_PKId
+                }
+            }).then(response => {
+                console.log("评分数据获取::",response.data);
+                console.log("response.data.C_Review:", response.data.C_Review);
+                // 评分数据加入
+                this.caseDetails.C_Review = Number(response.data.C_Review);
+                // 展示弹窗
+                this.caseDialogShow = true;
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
 
         },
         // 用户关闭查看案例弹窗
@@ -254,7 +268,25 @@ export default {
             this.caseDialogShow = false;
             // 修改用户指定的数据
             this.caseDetails = {};
-        }
+        },
+        // 用户修改评分 可能是修改或添加
+        updateRate(rate){
+            axios.get('http://8.137.80.44:8081/api/grade/update',{
+                params: {
+                    fPkId: this.caseDetails.F_PKId,
+                    rate: String(rate)
+                }
+            }).then(response => {
+                this.$message({
+                    message: '评分数据已成功更新',
+                    type: 'success'
+                });
+                this.caseDetails.C_Review = Number(rate);
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
+        },
     }
 }
 </script>
