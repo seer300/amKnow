@@ -91,7 +91,7 @@
         </el-row>
         <!-- 弹窗盒子 -->
         <faultDialog v-bind:dialogShow="dialogShow" v-bind:faultPhenomenon="faultPhenomenon"></faultDialog>
-        <CaseDialog :isShow="caseDialogShow" :caseDetails="caseDetails"></CaseDialog>
+        <CaseDialog :isShow="caseDialogShow" :caseDetails="caseDetails" v-model="caseDetailsC_Review"></CaseDialog>
     </div>
 </template>
 
@@ -173,6 +173,7 @@ export default {
             caseDialogShow: false,
             // 用户点击查看详情时，选择的案例数据
             caseDetails: {},
+            caseDetailsC_Review: null,
             // 可能存在的一并故障现象
             faultPhenomenon: [],
             tableData: [],
@@ -254,7 +255,7 @@ export default {
                 console.log("评分数据获取::",response.data);
                 console.log("response.data.C_Review:", response.data.C_Review);
                 // 评分数据加入
-                this.caseDetails.C_Review = Number(response.data.C_Review);
+                this.caseDetailsC_Review = Number(response.data.C_Review);
                 // 展示弹窗
                 this.caseDialogShow = true;
             }).catch(error => {
@@ -281,7 +282,7 @@ export default {
                     message: '评分数据已成功更新',
                     type: 'success'
                 });
-                this.caseDetails.C_Review = Number(rate);
+                this.caseDetailsC_Review = Number(rate);
             }).catch(error => {
                 // 请求失败，打印错误信息
                 console.error('请求失败:', error);

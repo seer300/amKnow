@@ -21,7 +21,7 @@
             <el-descriptions-item label="解决方案">{{ caseDetails.F_SolveFault }}</el-descriptions-item>
         </el-descriptions>
         <el-divider>案例评分</el-divider>
-        <el-rate v-model="caseDetails.C_Review" style="width: 125px;margin: 0 auto;" @change="updateRate"></el-rate>
+        <el-rate v-model="C_Review" style="width: 125px;margin: 0 auto;" @change="updateRate"></el-rate>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="closeWin">关闭</el-button>
         </div>
@@ -34,10 +34,14 @@ export default {
         // 传入参数，是否显示
         isShow: Boolean,
         // 传入参数，显示的案例信息
-        caseDetails: Object
+        caseDetails: Object,
+        // 评分数据
+        value: Number
     },
     data() {
-        return {};
+        return {
+            C_Review: this.value
+        };
     },
     methods: {
         // 用户关闭窗口
