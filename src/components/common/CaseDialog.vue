@@ -7,18 +7,18 @@
         <!-- 车辆基本信息 -->
         <el-descriptions title="车辆基本信息">
             <el-descriptions-item label="案例ID">{{ caseDetails.F_PKId }}</el-descriptions-item>
-            <el-descriptions-item label="所属品牌">{{ caseDetails.series }}</el-descriptions-item>
-            <el-descriptions-item label="产品型号">{{ caseDetails.model }}</el-descriptions-item>
+            <el-descriptions-item label="所属品牌">{{ caseDetails.F_ProModel }}</el-descriptions-item>
         </el-descriptions>
         <!-- 重大信息 -->
         <el-descriptions title="重大信息" :column="2">
             <el-descriptions-item label="重大报告编号">{{ caseDetails.F_ClaimCode }}</el-descriptions-item>
-            <el-descriptions-item label="车架号">{{ caseDetails.model }}</el-descriptions-item>
+            <el-descriptions-item label="引擎编号">{{ caseDetails.F_EngCode }}</el-descriptions-item>
+            <el-descriptions-item label="引擎类型">{{ caseDetails.F_EngType }}</el-descriptions-item>
         </el-descriptions>
         <el-descriptions :column="1">
             <el-descriptions-item label="故障描述">{{ caseDetails.F_FaultDesc }}</el-descriptions-item>
             <el-descriptions-item label="故障原因">{{ caseDetails.F_FaultReason }}</el-descriptions-item>
-            <el-descriptions-item label="解决方案">{{ caseDetails.F_SolveFault }}</el-descriptions-item>
+            <el-descriptions-item label="解决方案">{{ caseDetails.F_SloveFault }}</el-descriptions-item>
         </el-descriptions>
         <el-divider>案例评分</el-divider>
         <el-rate v-model="C_Review" style="width: 125px;margin: 0 auto;" @change="updateRate"></el-rate>
