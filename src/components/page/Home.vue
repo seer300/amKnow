@@ -114,6 +114,8 @@
 <script>
 import echarts from "echarts";
 import CaseDialog from "@/components/common/CaseDialog";
+// 引入 Axios
+import axios from 'axios';
 
 export default {
     // 当前页面组件用到的子组件
@@ -123,29 +125,7 @@ export default {
     data() {
         return {
             // 表格数据数组
-            tableData: [
-                {
-                    id: "01",
-                    series: "大众",
-                    model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
-                },
-                {
-                    id: "02",
-                    series: "大众",
-                    model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
-                },
-                {
-                    id: "03",
-                    series: "大众",
-                    model: "捷达",
-                    faultySystem: "发动机",
-                    faultyDesc: "发动机积碳严重"
-                }
-            ],
+            tableData: [],
             // 弹窗是否展示
             dialogShow: false,
             // 用户点击查看详情时，选择的案例数据
@@ -244,42 +224,44 @@ export default {
             this.o2chart.setOption(o2);
         },
         drawBarChart() {
-            var option = {
-                title: { text: "车型与故障率" },
-                tooltip: {},
-                xAxis: {
-                    axisLabel: {
-                        interval: 0
+            // 请求服务器
+            axios.get('http://8.137.80.44:8081/api/chart/carmodel').then(response => {
+                console.log("车型故障数据：", response.data);
+                let carModels = [];
+                let carModelCases = [];
+
+                for (const iterator of response.data) {
+                    carModels.push(iterator.F_ProModel);
+                    carModelCases.push(iterator.fault_count);
+                }
+
+                console.log(carModels);
+                console.log(carModelCases);
+
+                let option = {
+                    title: { text: "车型与故障率" },
+                    tooltip: {},
+                    xAxis: {
+                        axisLabel: {
+                            interval: 0
+                        },
+                        data: carModels
                     },
-                    data: [
-                        "朗逸",
-                        "卡罗拉",
-                        "捷达",
-                        "速腾",
-                        "汉兰达",
-                        "本田CR-V",
-                        "揽胜",
-                        "奔驰GLC",
-                        "RAV4荣放",
-                        "奥德赛",
-                        "保时捷911",
-                        "日产GT-R",
-                        "索罗德",
-                        "五菱宏光",
-                        "柯斯达"
+                    yAxis: {},
+                    series: [
+                        {
+                            name: "维修次数",
+                            type: "bar",
+                            data: carModelCases
+                        }
                     ]
-                },
-                yAxis: {},
-                series: [
-                    {
-                        name: "维修次数",
-                        type: "bar",
-                        data: [13, 16, 24, 21, 8, 13, 3, 6, 9, 9, 2, 4, 5, 18, 3]
-                    }
-                ]
-            };
-            this.chartColumn = echarts.init(document.getElementById("chartBar"));
-            this.chartColumn.setOption(option);
+                };
+                this.chartColumn = echarts.init(document.getElementById("chartBar"));
+                this.chartColumn.setOption(option);
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
         },
         drawBarChart23(){
             // 故障-车型分布 条形图绘制
@@ -319,29 +301,43 @@ export default {
             this.c2chart = echarts.init(document.getElementById("bar-Chart-2"));
             this.c2chart.setOption(c2);
 
-            // 故障-车型分布 条形图绘制
-            var c3 = {
-                // 图表标题配置
-                title:{
-                    // 主标题文本，支持使用 \n 换行
-                    text: "故障-地区"
-                },
-                xAxis: {
-                    type: 'category',
-                    data: ['北京', '上海', '广东', '四川', '陕西', '黑龙江', '江苏']
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [
-                    {
-                        data: [250, 220, 120, 80, 70, 160, 220],
-                        type: 'bar'
-                    }
-                ]
-            };
-            this.c3chart = echarts.init(document.getElementById("bar-Chart-3"));
-            this.c3chart.setOption(c3);
+            // 请求服务器
+            axios.get('http://8.137.80.44:8081/api/chart/area').then(response => {
+                let areas = [];
+                let areaCases = [];
+
+                for (const iterator of response.data) {
+                    areas.push(iterator.F_FaultAdd);
+                    areaCases.push(iterator.fault_count);
+                }
+                // 故障-车型分布 条形图绘制
+                var c3 = {
+                    // 图表标题配置
+                    title:{
+                        // 主标题文本，支持使用 \n 换行
+                        text: "故障-地区"
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: areas
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            data: areaCases,
+                            type: 'bar'
+                        }
+                    ]
+                };
+                this.c3chart = echarts.init(document.getElementById("bar-Chart-3"));
+                this.c3chart.setOption(c3);
+                
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
         },
         showDetails(rowdata){
             // 展示弹窗
