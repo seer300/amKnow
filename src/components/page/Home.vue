@@ -145,83 +145,101 @@ export default {
     },
     methods: {
         drawCharts(){
-            var o1 = {
-                title: {
-                    text: "故障类型与频率",
-                },
-                tooltip: {
-                    trigger: "item",
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    orient: 'vertical',
-                    left: 'right'
-                },
-                series: [
-                    {
-                        name: "维修次数",
-                        type: "pie",
-                        radius: "55%",
-                        center: ["50%", "60%"],
-                        data: [
-                            { value: 1676, name: "发动机系统故障" },
-                            { value: 1258, name: "传动系统故障" },
-                            { value: 980, name: "制动系统故障" },
-                            { value: 930, name: "电气系统故障" },
-                            { value: 1045, name: "燃油系统故障" },
-                            { value: 305, name: "其他系统故障" }
-                        ],
-                        itemStyle: {
-                            emphasis: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: "rgba(0, 0, 0, 0.5)"
+            // 请求服务器
+            axios.get('http://8.137.80.44:8081/api/chart/faultType').then(response => {
+                let datas = [];
+
+                for (const iterator of response.data) {
+                    datas.push({
+                        value: iterator.faultType_count,
+                        name: iterator.F_Category_name
+                    });
+                }
+
+                let o1 = {
+                    title: {
+                        text: "故障类型与频率",
+                    },
+                    tooltip: {
+                        trigger: "item",
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'right'
+                    },
+                    series: [
+                        {
+                            name: "维修次数",
+                            type: "pie",
+                            radius: "55%",
+                            center: ["50%", "60%"],
+                            data: datas,
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: "rgba(0, 0, 0, 0.5)"
+                                }
                             }
                         }
-                    }
-                ]
-            };
-            this.o1chart = echarts.init(document.getElementById("bar-Chart"));
-            this.o1chart.setOption(o1);
+                    ]
+                };
+                this.o1chart = echarts.init(document.getElementById("bar-Chart"));
+                this.o1chart.setOption(o1);
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
 
             // 故障件热点分析 饼图绘制
-            var o2 = {
-                // 图表标题配置
-                title:{
-                    // 主标题文本，支持使用 \n 换行
-                    text: "故障件与更换"
-                },
-                tooltip: {
-                    trigger: 'item'
-                },
-                legend: {
-                    orient: 'vertical',
-                    left: 'right'
-                },
-                series: [
-                    {
-                        name: 'Access From',
-                        type: 'pie',
-                        radius: '50%',
-                        data: [
-                            { value: 1048, name: '汽缸' },
-                            { value: 735, name: '活塞' },
-                            { value: 580, name: '曲轴' },
-                            { value: 484, name: '水泵' },
-                            { value: 300, name: '火花塞' }
-                        ],
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            // 请求服务器
+            axios.get('http://8.137.80.44:8081/api/chart/faultComponent').then(response => {
+                let datas = [];
+
+                for (const iterator of response.data) {
+                    datas.push({
+                        value: iterator.C,
+                        name: iterator.F_PART
+                    });
+                }
+
+                let o2 = {
+                    // 图表标题配置
+                    title:{
+                        // 主标题文本，支持使用 \n 换行
+                        text: "故障件与更换"
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'right'
+                    },
+                    series: [
+                        {
+                            // name: 'Access From',
+                            type: 'pie',
+                            radius: '50%',
+                            data: datas,
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
                             }
                         }
-                    }
-                ]
-            };
-            this.o2chart = echarts.init(document.getElementById("pie-Chart"));
-            this.o2chart.setOption(o2);
+                    ]
+                };
+                this.o2chart = echarts.init(document.getElementById("pie-Chart"));
+                this.o2chart.setOption(o2);
+                
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
         },
         drawBarChart() {
             // 请求服务器
