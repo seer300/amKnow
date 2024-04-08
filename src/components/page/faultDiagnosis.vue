@@ -4,23 +4,41 @@
         <el-row class="row-class">
             <el-col :span="18">
                 <el-row class="row-class">
-                    <el-col :span="6">
+                    <!-- <el-col :span="6">
                         <el-input v-model="fKGFlag_val" placeholder="请输入标签" style="width: 80%;"></el-input>
+                    </el-col> -->
+                    <el-col :span="6">
+                        <el-select v-model="carModel_val" filterable placeholder="请选择车型">
+                            <el-option
+                            v-for="(value,index) in carModels"
+                            :key="index"
+                            :label="value"
+                            :value="value">
+                            </el-option>
+                        </el-select>
                     </el-col>
                     <el-col :span="6">
-                        <el-input v-model="carModel_val" placeholder="请输入车型" style="width: 80%;"></el-input>
+                        <el-select v-model="carSeries_val" filterable placeholder="请选择车系">
+                            <el-option
+                            v-for="(value,index) in carSeries"
+                            :key="index"
+                            :label="value"
+                            :value="value">
+                            </el-option>
+                        </el-select>
                     </el-col>
                     <el-col :span="6">
-                        <el-input v-model="carSeries_val" placeholder="请输入车系" style="width: 80%;"></el-input>
+                        <el-select v-model="selfaultKMs" filterable placeholder="请选择行驶里程范围">
+                            <el-option
+                            v-for="item in faultKMs"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-col>
                     <el-col :span="6">
-                        <el-input v-model="faultKM_max_val" placeholder="请输入最大里程" style="width: 80%;"></el-input>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-input v-model="faultKM_min_val" placeholder="请输入最小里程" style="width: 80%;margin-top: 5px;"></el-input>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-input v-model="fFaultDesc_val" placeholder="请输入故障关键字" style="width: 80%;margin-top: 5px;"></el-input>
+                        <el-input v-model="fFaultDesc_val" placeholder="请输入故障部位关键字" style="width: 80%;"></el-input>
                     </el-col> 
                 </el-row>
 
@@ -99,9 +117,36 @@ export default {
             // 相似案例数据,服务器返回
             caseDatas: [],
             //最大最小里程
-            faultKM_max_val: null,
-            faultKM_min_val: null,
+            faultKMs: [
+                {
+                    value: 0,
+                    label: '0~5000公里'
+                },
+                {
+                    value: 1,
+                    label: '5000~1万公里'
+                },
+                {
+                    value: 2,
+                    label: '1万~2万公里'
+                },
+                {
+                    value: 3,
+                    label: '2万~5万公里'
+                },
+                {
+                    value: 4,
+                    label: '5万~10万公里'
+                },
+                {
+                    value: 5,
+                    label: '10万公里以上'
+                },
+            ],
+            selfaultKMs: null,
             carSeries_val: null,
+            carSeries: [],
+            carModels: [],
             carModel_val: null,
             fFaultDesc_val: null,
             fKGFlag_val: null,
@@ -127,6 +172,28 @@ export default {
             // 请求失败，打印错误信息
             console.error('请求失败:', error);
         });
+        // 获取车型选项数据
+        axios.get('http://8.137.80.44:8081/api/ClainMain/getCarModel').then(response => {
+            let datas = [];
+            for (const iterator of response.data) {
+                datas.push(iterator.F_ProModel);
+            }
+            this.carModels = datas;
+        }).catch(error => {
+            // 请求失败，打印错误信息
+            console.error('请求失败:', error);
+        });
+        // 获取车系选项数据
+        axios.get('http://8.137.80.44:8081/api/ClainMain/getCarSeries').then(response => {
+            let datas = [];
+            for (const iterator of response.data) {
+                datas.push(iterator.F_ProSerie);
+            }
+            this.carSeries = datas;
+        }).catch(error => {
+            // 请求失败，打印错误信息
+            console.error('请求失败:', error);
+        });
     },
     // 业务函数集
     methods:{
@@ -148,11 +215,36 @@ export default {
             if (this.fKGFlag_val != null) {
                 formData.append('FKGFlag', this.fKGFlag_val);
             }
-            if (this.faultKM_min_val != null) {
-                formData.append('min', this.faultKM_min_val);
-            }
-            if (this.faultKM_max_val != null) {
-                formData.append('max', this.faultKM_max_val);
+            if (this.selfaultKMs != null) {
+                // 用户选择了里程
+                switch (this.selfaultKMs) {
+                    case 0:
+                        formData.append('min', 0);
+                        formData.append('max', 5000);
+                        break;
+                    case 1:
+                        formData.append('min', 5000);
+                        formData.append('max', 10000);
+                        break;
+                    case 2:
+                        formData.append('min', 10000);
+                        formData.append('max', 20000);
+                        break;
+                    case 3:
+                        formData.append('min', 20000);
+                        formData.append('max', 50000);
+                        break;
+                    case 4:
+                        formData.append('min', 50000);
+                        formData.append('max', 100000);
+                        break;
+                    case 5:
+                        formData.append('min', 100000);
+                        formData.append('max', 1000000);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             // 请求服务器，获取相似案例
@@ -160,7 +252,8 @@ export default {
                 console.log(response.data);
 
                 this.caseDatas = response.data;
-                this.dialogShow = true;
+                // this.dialogShow = true;
+                this.resultdiv = true;
             }).catch(error => {
                 // 请求失败，打印错误信息
                 console.error('请求失败:', error);
