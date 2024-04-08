@@ -156,7 +156,7 @@ export default {
             }
 
             // 请求服务器，获取相似案例
-            axios.post('http://127.0.0.1:8081/api/ClainMain/getData', formData).then(response => {
+            axios.post('http://8.137.80.44:8081/api/ClainMain/getData', formData).then(response => {
                 console.log(response.data);
 
                 this.caseDatas = response.data;
