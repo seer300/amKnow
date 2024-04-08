@@ -3,46 +3,26 @@
     <div>
         <el-row class="row-class">
             <el-col :span="18">
-                <el-select v-model="selCarSeries" filterable placeholder="请选择品牌">
-                    <el-option
-                    v-for="(value,index) in carSeries"
-                    :key="index"
-                    :label="value"
-                    :value="value">
-                    </el-option>
-                </el-select>
-                <el-select v-model="selCarModel" filterable placeholder="请选择车型">
-                    <el-option
-                    v-for="(value,index) in carModel"
-                    :key="index"
-                    :label="value"
-                    :value="value">
-                    </el-option>
-                </el-select>
-                <el-select v-model="selfaultKM" filterable placeholder="请选择行驶里程">
-                    <el-option
-                    v-for="(value,index) in faultKM"
-                    :key="index"
-                    :label="value"
-                    :value="value">
-                    </el-option>
-                </el-select>
-                <el-select v-model="value" filterable placeholder="请选择车龄">
-                    <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-                <el-select v-model="value" filterable placeholder="请选择故障件">
-                    <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
+                <el-row class="row-class">
+                    <el-col :span="6">
+                        <el-input v-model="fKGFlag_val" placeholder="请输入标签" style="width: 80%;"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-input v-model="carModel_val" placeholder="请输入车型" style="width: 80%;"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-input v-model="carSeries_val" placeholder="请输入车系" style="width: 80%;"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-input v-model="faultKM_max_val" placeholder="请输入最大里程" style="width: 80%;"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-input v-model="faultKM_min_val" placeholder="请输入最小里程" style="width: 80%;margin-top: 5px;"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-input v-model="fFaultDesc_val" placeholder="请输入故障关键字" style="width: 80%;margin-top: 5px;"></el-input>
+                    </el-col> 
+                </el-row>
 
                 <!-- 案例输入框 -->
                 <el-input type="textarea" :rows="8" placeholder="请描述你遇到的问题" v-model="textarea"></el-input>
@@ -59,13 +39,13 @@
                     <el-row class="row-class">
                         <h3>相似案例：</h3>
                         <el-table :data="caseDatas" style="width: 100%" height="400">
-                            <el-table-column prop="id" label="案例名称" width="180"></el-table-column>
-                            <el-table-column prop="similarity" label="相似度"></el-table-column>
-                            <el-table-column prop="desc" label="故障原因"></el-table-column>
+                            <el-table-column prop="F_PKId" label="案例ID" width="180"></el-table-column>
+                            <el-table-column prop="bfb" label="相似度"></el-table-column>
+                            <el-table-column prop="F_FaultReason" label="故障原因"></el-table-column>
                             <el-table-column fixed="right" label="操作" width="200">
                                 <template slot-scope="scope">
                                     <el-button @click="showDetails(scope.row)" type="text">查看案例</el-button>
-                                    <el-button @click="showDetails(scope.row)" type="text">收藏案例</el-button>
+                                    <el-button @click="addCollectCase(scope.row)" type="text">收藏案例</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -82,7 +62,7 @@
                     <el-table-column label="操作" fixed="right">
                         <template slot-scope="scope">
                             <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
-                            <el-link type="primary" @click="collectionCase(scope.row)" style="margin-left: 8px;">收藏</el-link>
+                            <el-link type="primary" @click="addCollectCase(scope.row)" style="margin-left: 8px;">收藏</el-link>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -100,6 +80,7 @@ import faultDialog from "@/components/common/faultDialog";
 import CaseDialog from "@/components/common/CaseDialog";
 // 引入 Axios
 import axios from 'axios';
+import { number } from "echarts/lib/export";
 
 export default {
     // 当前页面组件用到的子组件
@@ -116,57 +97,15 @@ export default {
             // 结果区域显示控制
             resultdiv: false,
             // 相似案例数据,服务器返回
-            caseDatas: [
-                {
-                    id: "1",
-                    series: "大众",
-                    model: "宝来",
-                    similarity: "96%",
-                    desc: "发动机活塞环磨损，气缸壁磨损严重，导致气密性下降，影响了发动机的正常工作。"
-                },
-                {
-                    id: "2",
-                    series: "大众",
-                    model: "宝来",
-                    similarity: "78%",
-                    desc: "制动系统泵体漏油，制动液位过低，影响了制动系统的正常工作"
-                },
-                {
-                    id: "3",
-                    series: "大众",
-                    model: "宝来",
-                    similarity: "68%",
-                    desc: "点火线路接触不良，导致发动机点火不稳定"
-                }
-            ],
-            //故障里程选择
-            faultKM: [
-                "5000公里以下",
-                "5000~10000公里",
-                "10000~15000公里",
-                "15000~20000公里",
-                "25000~30000公里",
-                "30000公里以上",
-            ],
-            selfaultKM: null,
-            selCarSeries: null,
-            selCarModel: null,
-            carSeries: [
-                "奥迪",
-                "宝马",
-                "奔驰",
-                "日产",
-                "大众",
-                "福特",
-            ],
-            carModel: [
-                "大众途观",
-                "奥迪A4",
-                "奔驰C级",
-                "日产天籁",
-                "丰田RAV4",
-                "宝马3系"
-            ],
+            caseDatas: [],
+            //最大最小里程
+            faultKM_max_val: null,
+            faultKM_min_val: null,
+            carSeries_val: null,
+            carModel_val: null,
+            fFaultDesc_val: null,
+            fKGFlag_val: null,
+
             // 故障选择弹窗是否展示
             dialogShow: false,
             // 案例详情弹窗是否展示
@@ -192,40 +131,67 @@ export default {
     // 业务函数集
     methods:{
         submitDescribe() {
-            // 获取到用户输入的描述
-            console.log(this.textarea);
+            const formData = new FormData();
+            // 填充用户输入的故障信息
+            if (this.fFaultDesc_val != null) {
+                formData.append('FFaultDesc', this.fFaultDesc_val);   
+            }else{
+                alert("故障关键字是必须填写的！");
+                return;
+            }
+            if (this.carModel_val != null) {
+                formData.append('FProModel', this.carModel_val);
+            }
+            if (this.carSeries_val != null) {
+                formData.append('FProSerie', this.carSeries_val);
+            }
+            if (this.fKGFlag_val != null) {
+                formData.append('FKGFlag', this.fKGFlag_val);
+            }
+            if (this.faultKM_min_val != null) {
+                formData.append('min', this.faultKM_min_val);
+            }
+            if (this.faultKM_max_val != null) {
+                formData.append('max', this.faultKM_max_val);
+            }
 
-            // 请求服务器，发送描述
+            // 请求服务器，获取相似案例
+            axios.post('http://127.0.0.1:8081/api/ClainMain/getData', formData).then(response => {
+                console.log(response.data);
+
+                this.caseDatas = response.data;
+                this.dialogShow = true;
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
+
 
             // 获取可能存在的一并故障现象，并弹窗让用户选择
-            this.faultPhenomenon.push({
-                faultText: "发动机异响",
-                isSelect: false
-            });
-            this.faultPhenomenon.push({
-                faultText: "机油灯警告",
-                isSelect: false
-            });
-            this.faultPhenomenon.push({
-                faultText: "车身异响",
-                isSelect: false
-            });
-            this.faultPhenomenon.push({
-                faultText: "漏油",
-                isSelect: false
-            });
-            this.faultPhenomenon.push({
-                faultText: "无法启动",
-                isSelect: false
-            });
-            this.faultPhenomenon.push({
-                faultText: "水箱温度过高",
-                isSelect: false
-            });
-
-            console.log(this.faultPhenomenon);
-
-            this.dialogShow = true;
+            // this.faultPhenomenon.push({
+            //     faultText: "发动机异响",
+            //     isSelect: false
+            // });
+            // this.faultPhenomenon.push({
+            //     faultText: "机油灯警告",
+            //     isSelect: false
+            // });
+            // this.faultPhenomenon.push({
+            //     faultText: "车身异响",
+            //     isSelect: false
+            // });
+            // this.faultPhenomenon.push({
+            //     faultText: "漏油",
+            //     isSelect: false
+            // });
+            // this.faultPhenomenon.push({
+            //     faultText: "无法启动",
+            //     isSelect: false
+            // });
+            // this.faultPhenomenon.push({
+            //     faultText: "水箱温度过高",
+            //     isSelect: false
+            // });
         },
         // 用户取消选择故障现象
         closeDialog(){
@@ -283,6 +249,29 @@ export default {
                     type: 'success'
                 });
                 this.caseDetailsC_Review = Number(rate);
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
+        },
+        // 用户添加收藏案例
+        addCollectCase(rowdata){
+            console.log("选择的收藏案例信息：", rowdata);
+
+            axios.get('http://8.137.80.44:8081/api/fault/addstarlist',{
+                params: {
+                    F_PKId: rowdata.F_PKId,
+                }
+            }).then(response => {
+                console.log("添加案例成功：",response);
+
+                if (response.data == 1) {
+                    alert("收藏成功！");
+                    this.refreshStarCase();
+                }else if (response.data == -1) {
+                    alert("此案例已经收藏了！");
+                }
+
             }).catch(error => {
                 // 请求失败，打印错误信息
                 console.error('请求失败:', error);
