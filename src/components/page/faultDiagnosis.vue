@@ -37,9 +37,6 @@
                             </el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="6">
-                        <el-input v-model="fFaultDesc_val" placeholder="请输入故障部位关键字" style="width: 80%;"></el-input>
-                    </el-col> 
                 </el-row>
 
                 <!-- 案例输入框 -->
@@ -50,8 +47,26 @@
                 <div v-show="resultdiv">
                     <!-- 分析结果内容框 -->
                     <el-row class="row-class">
-                        <h3>诊断结果为：</h3>
-                        <div>{{ resultDescription }}</div>
+                        <el-col :span="24" class="centered-content">
+                            <div style="margin-right: 15px;">
+                                诊断结果为: 
+                                {{ resultDescription }}
+                            </div>
+                            <!-- 评价反馈 -->
+                            <el-popover
+                                placement="right"
+                                width="200"
+                                trigger="click"
+                            >
+                                <div>
+                                    <p style="text-align: center;">本次故障诊断结果如何?</p>
+                                    <div style="text-align: center; margin: 0">
+                                        <el-rate v-model="modelResults" @change="evaluateModelResults"></el-rate>
+                                    </div>
+                                </div>
+                                <el-button slot="reference">结果反馈</el-button>
+                            </el-popover>
+                        </el-col>
                     </el-row>
                     <!-- 相似案例表格 -->
                     <el-row class="row-class">
@@ -109,11 +124,11 @@ export default {
     data() {
         return {
             // 用户输入描述
-            textarea: '',
+            textarea: null,
             // 分析结果
-            resultDescription: "发动机系统故障",
+            resultDescription: "null",
             // 结果区域显示控制
-            resultdiv: false,
+            resultdiv: true,
             // 相似案例数据,服务器返回
             caseDatas: [],
             //最大最小里程
@@ -148,7 +163,6 @@ export default {
             carSeries: [],
             carModels: [],
             carModel_val: null,
-            fFaultDesc_val: null,
             fKGFlag_val: null,
 
             // 故障选择弹窗是否展示
@@ -161,6 +175,7 @@ export default {
             // 可能存在的一并故障现象
             faultPhenomenon: [],
             tableData: [],
+            modelResults: null,
         }
     },
     mounted() {
@@ -198,54 +213,68 @@ export default {
     // 业务函数集
     methods:{
         submitDescribe() {
-            const formData = new FormData();
-            // 填充用户输入的故障信息
-            if (this.fFaultDesc_val != null) {
-                formData.append('FFaultDesc', this.fFaultDesc_val);   
-            }else{
-                alert("故障关键字是必须填写的！");
+            this.modelResults = null;
+            // 判断是否填写了故障描述
+            if (this.textarea == null || this.textarea == "") {
+                alert("请输入故障现象描述!");
                 return;
             }
-            if (this.carModel_val != null) {
-                formData.append('FProModel', this.carModel_val);
-            }
-            if (this.carSeries_val != null) {
-                formData.append('FProSerie', this.carSeries_val);
-            }
-            if (this.fKGFlag_val != null) {
-                formData.append('FKGFlag', this.fKGFlag_val);
-            }
-            if (this.selfaultKMs != null) {
-                // 用户选择了里程
-                switch (this.selfaultKMs) {
-                    case 0:
-                        formData.append('min', 0);
-                        formData.append('max', 5000);
-                        break;
-                    case 1:
-                        formData.append('min', 5000);
-                        formData.append('max', 10000);
-                        break;
-                    case 2:
-                        formData.append('min', 10000);
-                        formData.append('max', 20000);
-                        break;
-                    case 3:
-                        formData.append('min', 20000);
-                        formData.append('max', 50000);
-                        break;
-                    case 4:
-                        formData.append('min', 50000);
-                        formData.append('max', 100000);
-                        break;
-                    case 5:
-                        formData.append('min', 100000);
-                        formData.append('max', 1000000);
-                        break;
-                    default:
-                        break;
+            // 请求模型，判断故障系统
+            axios.post('http://localhost:10713/news/predict_label',{
+                content: this.textarea
+            }).then(response => {
+                console.log(response.data);
+                // 显示故障系统
+                this.resultDescription = response.data.label;
+
+                // 查找相似案例
+                const formData = new FormData();
+                if (this.carModel_val != null) {
+                    formData.append('FProModel', this.carModel_val);
                 }
-            }
+                if (this.carSeries_val != null) {
+                    formData.append('FProSerie', this.carSeries_val);
+                }
+                if (this.selfaultKMs != null) {
+                    // 用户选择了里程
+                    switch (this.selfaultKMs) {
+                        case 0:
+                            formData.append('min', 0);
+                            formData.append('max', 5000);
+                            break;
+                        case 1:
+                            formData.append('min', 5000);
+                            formData.append('max', 10000);
+                            break;
+                        case 2:
+                            formData.append('min', 10000);
+                            formData.append('max', 20000);
+                            break;
+                        case 3:
+                            formData.append('min', 20000);
+                            formData.append('max', 50000);
+                            break;
+                        case 4:
+                            formData.append('min', 50000);
+                            formData.append('max', 100000);
+                            break;
+                        case 5:
+                            formData.append('min', 100000);
+                            formData.append('max', 1000000);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                // 故障系统类型
+                formData.append('FKGFlag', this.fKGFlag_val);
+
+            }).catch(error => {
+                // 请求失败，打印错误信息
+                console.error('请求失败:', error);
+            });
+
+            
 
             // 请求服务器，获取相似案例
             axios.post('http://8.137.80.44:8081/api/ClainMain/getData', formData).then(response => {
@@ -259,45 +288,10 @@ export default {
                 console.error('请求失败:', error);
             });
 
-
-            // 获取可能存在的一并故障现象，并弹窗让用户选择
-            // this.faultPhenomenon.push({
-            //     faultText: "发动机异响",
-            //     isSelect: false
-            // });
-            // this.faultPhenomenon.push({
-            //     faultText: "机油灯警告",
-            //     isSelect: false
-            // });
-            // this.faultPhenomenon.push({
-            //     faultText: "车身异响",
-            //     isSelect: false
-            // });
-            // this.faultPhenomenon.push({
-            //     faultText: "漏油",
-            //     isSelect: false
-            // });
-            // this.faultPhenomenon.push({
-            //     faultText: "无法启动",
-            //     isSelect: false
-            // });
-            // this.faultPhenomenon.push({
-            //     faultText: "水箱温度过高",
-            //     isSelect: false
-            // });
         },
         // 用户取消选择故障现象
         closeDialog(){
             this.dialogShow = false;
-            this.faultPhenomenon = [];
-        },
-        // 用户选择完故障现象点击确定
-        confirmDialog(){
-            
-            // 关闭弹窗
-            this.closeDialog();
-            // 修改resultDescription,显示结果描述
-            this.resultdiv = true;
             this.faultPhenomenon = [];
         },
         // 用户点击查看案例的调用函数
@@ -370,6 +364,14 @@ export default {
                 console.error('请求失败:', error);
             });
         },
+        // 用户评价诊断结果
+        evaluateModelResults(rate1){
+            this.$message({
+                showClose: true,
+                type: 'success',
+                message: '感谢你的反馈!'
+            });
+        },
     }
 }
 </script>
@@ -380,5 +382,10 @@ export default {
 }
 .resultdiv{
     height: 200px;
+}
+
+.centered-content {
+  display: flex;
+  align-items: center; /* 垂直居中 */
 }
 </style>
