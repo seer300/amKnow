@@ -229,6 +229,11 @@ export default {
 
                 // 查找相似案例
                 const formData = new FormData();
+                //用户的故障描述
+                formData.append('FFaultDesc', this.textarea);
+                // 故障系统类型
+                formData.append('FKGFlag', this.resultDescription);
+
                 if (this.carModel_val != null) {
                     formData.append('FProModel', this.carModel_val);
                 }
@@ -266,28 +271,23 @@ export default {
                             break;
                     }
                 }
-                // 故障系统类型
-                formData.append('FKGFlag', this.fKGFlag_val);
+
+                // 请求服务器，获取相似案例
+                axios.post('http://8.137.80.44:8081/api/ClainMain/getData', formData).then(response => {
+                    console.log(response.data);
+
+                    this.caseDatas = response.data;
+                    // this.dialogShow = true;
+                    this.resultdiv = true;
+                }).catch(error => {
+                    // 请求失败，打印错误信息
+                    console.error('请求失败:', error);
+                });
 
             }).catch(error => {
                 // 请求失败，打印错误信息
                 console.error('请求失败:', error);
             });
-
-            
-
-            // 请求服务器，获取相似案例
-            axios.post('http://8.137.80.44:8081/api/ClainMain/getData', formData).then(response => {
-                console.log(response.data);
-
-                this.caseDatas = response.data;
-                // this.dialogShow = true;
-                this.resultdiv = true;
-            }).catch(error => {
-                // 请求失败，打印错误信息
-                console.error('请求失败:', error);
-            });
-
         },
         // 用户取消选择故障现象
         closeDialog(){
