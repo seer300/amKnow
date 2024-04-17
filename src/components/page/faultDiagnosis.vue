@@ -126,9 +126,9 @@ export default {
             // 用户输入描述
             textarea: null,
             // 分析结果
-            resultDescription: "null",
+            resultDescription: null,
             // 结果区域显示控制
-            resultdiv: true,
+            resultdiv: false,
             // 相似案例数据,服务器返回
             caseDatas: [],
             //最大最小里程
@@ -220,7 +220,7 @@ export default {
                 return;
             }
             // 请求模型，判断故障系统
-            axios.post('http://localhost:10713/news/predict_label',{
+            axios.post('http://localhost:8080/proxy/news/predict_label',{
                 content: this.textarea
             }).then(response => {
                 console.log(response.data);
