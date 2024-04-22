@@ -71,9 +71,9 @@
                     <!-- 相似案例表格 -->
                     <el-row class="row-class">
                         <h3>相似案例：</h3>
-                        <el-table :data="caseDatas" style="width: 100%" height="400">
+                        <el-table :data="caseDatas" style="width: 100%" height="400" :default-sort = "{prop: 'bfb', order: 'descending'}">
                             <el-table-column prop="F_PKId" label="案例ID" width="180"></el-table-column>
-                            <el-table-column prop="bfb" label="相似度"></el-table-column>
+                            <el-table-column prop="bfb" label="相似度" sortable :formatter="formatter"></el-table-column>
                             <el-table-column prop="F_FaultReason" label="故障原因"></el-table-column>
                             <el-table-column fixed="right" label="操作" width="200">
                                 <template slot-scope="scope">
@@ -220,7 +220,7 @@ export default {
                 return;
             }
             // 请求模型，判断故障系统
-            axios.post('http://localhost:8080/proxy/news/predict_label',{
+            axios.post('http://localhost:10713/news/predict_label',{
                 content: this.textarea
             }).then(response => {
                 console.log(response.data);
@@ -372,6 +372,10 @@ export default {
                 message: '感谢你的反馈!'
             });
         },
+        // 表格相似度数据定制
+        formatter(row, column) {
+            return String(row.bfb) + "%";
+        }
     }
 }
 </script>
