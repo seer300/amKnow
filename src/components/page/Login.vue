@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <el-form :model="formData" :rules="formRules" ref="formData">
-      <span class="title">amKnow</span>
+      <span class="title">汽车故障诊断服务系统</span>
       <el-form-item prop="username">
         <el-input
           type="text"
@@ -44,8 +44,8 @@ export default {
       state: false,
       logining: false,
       formData: {
-        username: "admin",
-        password: "123456"
+        username: null,
+        password: null
       },
       formRules: {
         username: [
@@ -125,7 +125,7 @@ export default {
   text-align: center;
   margin: 0px auto 40px auto;
   color: #505458;
-  font-size: 40px;
+  font-size: 25px;
 }
 .el-form-item {
   margin-bottom: 22px;
