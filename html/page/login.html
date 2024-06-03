@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+</head>
+<!-- import CSS -->
+<link rel="stylesheet" href="../js/index.css">
+<body>
+    <div id="app">
+        <div class="login-container">
+            <el-form :model="formData" :rules="formRules" ref="formData">
+              <span class="title">汽车故障诊断服务系统</span>
+              <el-form-item prop="username">
+                <el-input
+                  type="text"
+                  v-model="formData.username"
+                  auto-complete="off"
+                  @change="formData.username=formData.username.replace(/\s+/g,'')"
+                  prefix-icon="icon iconfont icon-peoplefill"
+                  placeholder="请输入用户名"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  :type="state ? 'text' : 'password'"
+                  v-model="formData.password"
+                  auto-complete="off"
+                  prefix-icon="icon iconfont icon-mima"
+                  placeholder="请输入密码"
+                >
+                  <i
+                    slot="suffix"
+                    @click="showOrHide"
+                    style="cursor:pointer;"
+                    class="state ? 'icon iconfont icon-yanjing_kai' : 'icon iconfont icon-yanjing_bi'"
+                  ></i>
+                </el-input>
+              </el-form-item>
+              <el-form-item style="padding-top:20px">
+                <el-button class="login-button" @click.native.prevent="handleLogin">登录</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+    </div>
+</body>
+<!-- Vue -->
+<script src="../js/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="../js/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                state: false,
+                logining: false,
+                formData: {
+                    username: null,
+                    password: null
+                },
+                formRules: {
+                    username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+                    password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+                }
+            };
+        },
+        methods: {
+            showOrHide() {
+                this.state = !this.state;
+            },
+            handleLogin() {
+                console.log("登录点击");
+            }
+        }
+    });
+
+</script>
+<style>
+    .login-container {
+      border-radius: 5px;
+      background-clip: padding-box;
+      margin: 25vh auto;
+      width: 300px;
+      padding: 35px 35px 15px 35px;
+      background: #fff;
+      border: 1px solid #eaeaea;
+      box-shadow: 0 0 25px #cac6c6;
+    }
+    .title {
+      display: block;
+      text-align: center;
+      margin: 0px auto 40px auto;
+      color: #505458;
+      font-size: 25px;
+    }
+    .el-form-item {
+      margin-bottom: 22px;
+    }
+    .login-button {
+      width: 100%;
+      background-color: #f6db63;
+      border-color: #f6db63;
+      color: #505458;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #ffec8b;
+      border-color: #ffec8b;
+    }
+    button:active{
+      background-color: #f6db63;
+      border-color: #f6db63;
+    }
+</style>
+</html>
