@@ -151,7 +151,7 @@
                                 <el-descriptions-item label="解决方案">{{ caseDetails.F_SloveFault }}</el-descriptions-item>
                             </el-descriptions>
                             <el-divider>案例评分</el-divider>
-                            <el-rate v-model="C_Review" style="width: 125px;margin: 0 auto;" @change="updateRate"></el-rate>
+                            <el-rate v-model="caseDetailsC_Review" style="width: 125px;margin: 0 auto;" @change="updateRate"></el-rate>
                             <div slot="footer" class="dialog-footer">
                                 <el-button type="primary" @click="closeCaseDialog">关闭</el-button>
                             </div>
