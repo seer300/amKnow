@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>故障案例</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.6/theme-chalk/index.css">
+    <style>
+        .texttitle {
+            color: black;
+        }
+        .textbody {
+            color: black;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="case-dialog" class="el-dialog__wrapper" style="display: none;">
+            <div class="el-dialog" role="dialog" aria-modal="true" aria-label="故障案例">
+                <div class="el-dialog__header">
+                    <span class="el-dialog__title">故障案例</span>
+                    <button type="button" class="el-dialog__headerbtn" aria-label="Close" onclick="closeWin()">
+                        <i class="el-dialog__close el-icon el-icon-close"></i>
+                    </button>
+                </div>
+                <div class="el-dialog__body">
+                    <div class="el-descriptions">
+                        <div class="el-descriptions__header">车辆基本信息</div>
+                        <div class="el-descriptions__body">
+                            <div class="el-descriptions-item">
+                                <span class="el-descriptions-item__label">案例ID</span>
+                                <span class="el-descriptions-item__content" id="case-id"></span>
+                            </div>
+                            <div class="el-descriptions-item">
+                                <span class="el-descriptions-item__label">所属品牌</span>
+                                <span class="el-descriptions-item__content" id="brand"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="el-descriptions" style="margin-top: 20px;">
+                        <div class="el-descriptions__header">重大信息</div>
+                        <div class="el-descriptions__body el-descriptions__body--colon">
+                            <div class="el-descriptions-item">
+                                <span class="el-descriptions-item__label">重大报告编号</span>
+                                <span class="el-descriptions-item__content" id="report-id"></span>
+                            </div>
+                            <div class="el-descriptions-item">
+                                <span class="el-descriptions-item__label">引擎编号</span>
+                                <span class="el-descriptions-item__content" id="engine-id"></span>
+                            </div>
+                            <div class="el-descriptions-item">
+                                <span class="el-descriptions-item__label">引擎类型</span>
+                                <span class="el-descriptions-item__content" id="engine-type"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="el-descriptions" style="margin-top: 20px;">
+                        <div class="el-descriptions__body el-descriptions__body--colon">
+                            <div class="el-descriptions-item">
+                                <span class="el-descriptions-item__label">故障描述</span>
+                                <span class="el-descriptions-item__content" id="fault-desc"></span>
+                            </div>
+                            <div class="el-descriptions-item">
+                                <span class="el-descriptions-item__label">故障原因</span>
+                                <span class="el-descriptions-item__content" id="fault-reason"></span>
+                            </div>
+                            <div class="el-descriptions-item">
+                                <span class="el-descriptions-item__label">解决方案</span>
+                                <span class="el-descriptions-item__content" id="solution"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="el-divider">案例评分</div>
+                    <div class="el-rate" id="rate" style="width: 125px; margin: 0 auto;"></div>
+                </div>
+                <div class="el-dialog__footer">
+                    <div class="dialog-footer">
+                        <button type="button" class="el-button el-button--primary" onclick="closeWin()">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.6/index.js"></script>
+    <script>
+        // 初始化Vue实例以使用Element UI组件（可选）
+        new Vue({ el: '#app' });
+
+        // 数据对象，模拟传入数据
+        const caseDetails = {
+            // F_PKId: "12345",
+            // F_ProModel: "品牌A",
+            // F_ClaimCode: "C123456",
+            // F_EngCode: "E123456",
+            // F_EngType: "V8",
+            // F_FaultDesc: "引擎故障",
+            // F_FaultReason: "部件老化",
+            // F_SloveFault: "更换部件"
+        };
+
+        // 初始化评分数据
+        // let C_Review = 3;
+
+        // 显示弹窗和初始化数据
+        function showDialog() {
+            document.getElementById('case-id').innerText = caseDetails.F_PKId;
+            document.getElementById('brand').innerText = caseDetails.F_ProModel;
+            document.getElementById('report-id').innerText = caseDetails.F_ClaimCode;
+            document.getElementById('engine-id').innerText = caseDetails.F_EngCode;
+            document.getElementById('engine-type').innerText = caseDetails.F_EngType;
+            document.getElementById('fault-desc').innerText = caseDetails.F_FaultDesc;
+            document.getElementById('fault-reason').innerText = caseDetails.F_FaultReason;
+            document.getElementById('solution').innerText = caseDetails.F_SloveFault;
+            const rate = document.getElementById('rate');
+            rate.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement('i');
+                star.className = 'el-rate__icon el-icon-star-off';
+                if (i <= C_Review) {
+                    star.classList.add('el-rate__icon--full');
+                }
+                star.dataset.value = i;
+                star.onclick = () => updateRate(i);
+                rate.appendChild(star);
+            }
+            document.getElementById('case-dialog').style.display = 'block';
+        }
+
+        // 关闭弹窗
+        function closeWin() {
+            document.getElementById('case-dialog').style.display = 'none';
+        }
+
+        // 更新评分
+        function updateRate(rate) {
+            C_Review = rate;
+            showDialog(); // 重新渲染评分组件
+        }
+
+        // 示例：显示弹窗
+        showDialog();
+    </script>
+</body>
+</html>
