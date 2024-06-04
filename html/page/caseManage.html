@@ -1,380 +1,393 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
+
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>案例管理</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.6/theme-chalk/index.css">
-    <style>
-        .toolbar {
-            padding-bottom: 0px;
-        }
-        .texttitle {
-            color: black;
-        }
-        .textbody {
-            color: black;
-            margin-top: 5px;
-        }
-    </style>
 </head>
+<!-- 引入elementui样式 -->
+<link rel="stylesheet" href="../js/elementui.css">
+
 <body>
     <div id="app">
-        <div style="margin-top: 10px;">
-            <button id="toggle-collect" class="el-button el-button--primary el-button--plain">查看个人收藏案例</button>
-        </div>
-        <div class="el-divider"></div>
-        <!-- 全部案例表格 -->
-        <div id="all-case-table">
-            <!-- 条件搜索框 -->
-            <div class="toolbar">
-                <form class="demo-form-inline" id="search-form">
-                    <select id="car-series" class="el-select">
-                        <option value="">品牌</option>
-                        <!-- 动态添加品牌选项 -->
-                    </select>
-                    <select id="car-type" class="el-select">
-                        <option value="">车型</option>
-                        <!-- 动态添加车型选项 -->
-                    </select>
-                    <input type="text" id="keyword" class="el-input" placeholder="故障件关键词">
-                    <button type="button" class="el-button el-button--primary" onclick="searchData()">查询</button>
-                </form>
-            </div>
-
-            <table class="el-table">
-                <thead>
-                    <tr>
-                        <th>案例ID</th>
-                        <th>车系</th>
-                        <th>车型</th>
-                        <th>故障描述</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="table-data">
-                    <!-- 动态添加表格数据 -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 个人收藏案例表格 -->
-        <div id="collect-case-table" style="display: none;">
-            <!-- 操作框 -->
-            <div class="toolbar">
-                <form class="demo-form-inline" id="collect-search-form">
-                    <select id="collect-car-series" class="el-select">
-                        <option value="">品牌</option>
-                        <!-- 动态添加品牌选项 -->
-                    </select>
-                    <select id="collect-car-type" class="el-select">
-                        <option value="">车型</option>
-                        <!-- 动态添加车型选项 -->
-                    </select>
-                    <input type="text" id="collect-keyword" class="el-input" placeholder="故障件关键词">
-                    <button type="button" class="el-button el-button--primary" onclick="searchStarData()">按条件查询</button>
-                    <button type="button" class="el-button el-button--danger" onclick="delCollectCase()">移除案例</button>
-                </form>
-            </div>
-
-            <table class="el-table">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="select-all"></th>
-                        <th>案例ID</th>
-                        <th>车系</th>
-                        <th>车型</th>
-                        <th>故障描述</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="collect-table-data">
-                    <!-- 动态添加表格数据 -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 弹窗 -->
-        <div id="case-dialog" class="el-dialog__wrapper" style="display: none;">
-            <div class="el-dialog" role="dialog" aria-modal="true" aria-label="故障案例">
-                <div class="el-dialog__header">
-                    <span class="el-dialog__title">故障案例</span>
-                    <button type="button" class="el-dialog__headerbtn" aria-label="Close" onclick="closeDialog()">
-                        <i class="el-dialog__close el-icon el-icon-close"></i>
-                    </button>
-                </div>
-                <div class="el-dialog__body">
-                    <div class="el-descriptions">
-                        <div class="el-descriptions__header">车辆基本信息</div>
-                        <div class="el-descriptions__body">
-                            <div class="el-descriptions-item">
-                                <span class="el-descriptions-item__label">案例ID</span>
-                                <span class="el-descriptions-item__content" id="dialog-case-id"></span>
-                            </div>
-                            <div class="el-descriptions-item">
-                                <span class="el-descriptions-item__label">所属品牌</span>
-                                <span class="el-descriptions-item__content" id="dialog-brand"></span>
-                            </div>
+        <el-row class="container">
+            <el-col :span="24" class="header">
+                <el-row type="flex" justify="center">
+                    <el-col :span="24" style="text-align: center;">多特征融合的汽车故障诊断服务系统</el-col>
+                </el-row>
+            </el-col>
+            <el-col :span="24" class="remain">
+                <!-- 左侧导航 -->
+                <nav :class="menu-collapsed">
+                    <el-menu id="elmenu" background-color="#eef1f6" text-color="#053343" active-text-color="#409EFF">
+                        <el-menu-item>
+                            <i class="el-icon-connection"></i>
+                            <span style="padding-left:4px">故障数据统计与分析</span>
+                        </el-menu-item>
+                        <el-menu-item>
+                            <i class="el-icon-connection"></i>
+                            <span style="padding-left:4px">故障诊断</span>
+                        </el-menu-item>
+                        <el-menu-item>
+                            <i class="el-icon-connection"></i>
+                            <span style="padding-left:4px">案例管理</span>
+                        </el-menu-item>
+                        <el-menu-item>
+                            <i class="el-icon-connection"></i>
+                            <span style="padding-left:4px">技术学习</span>
+                        </el-menu-item>
+                    </el-menu>
+                </nav>
+                <el-col :span="24" class="content-wrapper" style="padding:5px;overflow: auto;">
+                    <!-- 页面内容 -->
+                    <div>
+                        <div style="margin-top: 10px;">
+                            <el-button type="primary" plain @click="showCollectTable">{{ collectText }}</el-button>
                         </div>
-                    </div>
-                    <div class="el-descriptions" style="margin-top: 20px;">
-                        <div class="el-descriptions__header">重大信息</div>
-                        <div class="el-descriptions__body el-descriptions__body--colon">
-                            <div class="el-descriptions-item">
-                                <span class="el-descriptions-item__label">重大报告编号</span>
-                                <span class="el-descriptions-item__content" id="dialog-report-id"></span>
-                            </div>
-                            <div class="el-descriptions-item">
-                                <span class="el-descriptions-item__label">引擎编号</span>
-                                <span class="el-descriptions-item__content" id="dialog-engine-id"></span>
-                            </div>
-                            <div class="el-descriptions-item">
-                                <span class="el-descriptions-item__label">引擎类型</span>
-                                <span class="el-descriptions-item__content" id="dialog-engine-type"></span>
-                            </div>
+                        <el-divider></el-divider>
+                        <!-- 全部案例表格 -->
+                        <div v-show="!isShowCollectTable">
+                            <!-- 条件搜索框 -->
+                            <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+                                <el-form :inline="true" class="demo-form-inline">
+                                    <el-form-item>
+                                        <el-select v-model="dataFilter.carSeries" placeholder="品牌">
+                                            <el-option v-for="item in cars" :key="item" :label="item" :value="item"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-select v-model="dataFilter.carType" placeholder="车型">
+                                            <el-option v-for="item in cars2" :key="item" :label="item" :value="item"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-input v-model="dataFilter.keyword" placeholder="故障件关键词"></el-input>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-button type="primary" @click="searchData">查询</el-button>
+                                    </el-form-item>
+                                </el-form>
+                            </el-col>
+                
+                            <el-table :data="tableData" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+                                highlight-current-row height="500" style="border:1px solid #dfe6ec;">
+                                <el-table-column prop="F_PKId" label="案例ID" align="center"></el-table-column>
+                                <el-table-column prop="F_ProModel" label="车系" align="center"></el-table-column>
+                                <el-table-column prop="F_ProSerie" label="车型" align="center"></el-table-column>
+                                <el-table-column prop="F_FaultDesc" label="故障描述" align="center"></el-table-column>
+                
+                                <el-table-column label="操作" fixed="right">
+                                    <template slot-scope="scope">
+                                        <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
+                                        <el-link type="primary" @click="addCollectCase(scope.row)">收藏</el-link>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
                         </div>
-                    </div>
-                    <div class="el-descriptions" style="margin-top: 20px;">
-                        <div class="el-descriptions__body el-descriptions__body--colon">
-                            <div class="el-descriptions-item">
-                                <span class="el-descriptions-item__label">故障描述</span>
-                                <span class="el-descriptions-item__content" id="dialog-fault-desc"></span>
-                            </div>
-                            <div class="el-descriptions-item">
-                                <span class="el-descriptions-item__label">故障原因</span>
-                                <span class="el-descriptions-item__content" id="dialog-fault-reason"></span>
-                            </div>
-                            <div class="el-descriptions-item">
-                                <span class="el-descriptions-item__label">解决方案</span>
-                                <span class="el-descriptions-item__content" id="dialog-solution"></span>
-                            </div>
+                        <!-- 个人收藏案例表格 -->
+                        <div v-show="isShowCollectTable">
+                            <!-- 操作框 -->
+                            <el-col :span="24" class="toolbar">
+                                <el-form :inline="true" class="demo-form-inline">
+                                    <el-form-item>
+                                        <el-select v-model="dataFilter.carSeries" placeholder="品牌">
+                                            <el-option v-for="item in cars" :key="item" :label="item" :value="item"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-select v-model="dataFilter.carType" placeholder="车型">
+                                            <el-option v-for="item in cars2" :key="item" :label="item" :value="item"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-input v-model="dataFilter.keyword" placeholder="故障件关键词"></el-input>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-button type="primary" @click="searchStarData">按条件查询</el-button>
+                                    </el-form-item>
+                                    <el-button type="danger" @click="delCollectCase">移除案例</el-button>
+                                </el-form>
+                            </el-col>
+                
+                            <el-table :data="collectTableData" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+                                highlight-current-row height="500" style="border:1px solid #dfe6ec;"
+                                @select="handleSelect"
+                                @select-all="handleSelectAll">
+                                <!-- 多选头 -->
+                                <el-table-column type="selection" width="55"></el-table-column>
+                                <el-table-column prop="F_PKId" label="案例ID" align="center"></el-table-column>
+                                <el-table-column prop="F_ProModel" label="车系" align="center"></el-table-column>
+                                <el-table-column prop="F_ProSerie" label="车型" align="center"></el-table-column>
+                                <el-table-column prop="F_FaultDesc" label="故障描述" align="center"></el-table-column>
+                
+                                <el-table-column label="操作" fixed="right">
+                                    <template slot-scope="scope">
+                                        <el-link type="primary" @click="showDetails(scope.row)">查看详情</el-link>
+                                        <el-link type="danger" @click="delCollectCase(scope.row)">移出收藏</el-link>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
                         </div>
+                        <!-- 弹窗标签 -->
+                        <!-- <CaseDialog :isShow="dialogShow" :caseDetails="caseDetails" v-model="caseDetailsC_Review"></CaseDialog> -->
                     </div>
-                    <div class="el-divider">案例评分</div>
-                    <div class="el-rate" id="dialog-rate" style="width: 125px; margin: 0 auto;"></div>
-                </div>
-                <div class="el-dialog__footer">
-                    <div class="dialog-footer">
-                        <button type="button" class="el-button el-button--primary" onclick="closeDialog()">关闭</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                </el-col>
+            </el-col>
+        </el-row>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.6/index.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        const cars = ['大众', '宝马', '奔驰', '奥迪', '本田', '日产', '沃尔沃', '丰田'];
-        const cars2 = ['卡罗拉', '凯美瑞', '科鲁兹', 'C级', '朗逸', '迈腾', '5系'];
-
-        const dialog = document.getElementById('case-dialog');
-        let caseDetails = {};
-        let C_Review = null;
-
-        function showDialog(details, review) {
-            caseDetails = details;
-            C_Review = review;
-            document.getElementById('dialog-case-id').innerText = details.F_PKId;
-            document.getElementById('dialog-brand').innerText = details.F_ProModel;
-            document.getElementById('dialog-report-id').innerText = details.F_ClaimCode;
-            document.getElementById('dialog-engine-id').innerText = details.F_EngCode;
-            document.getElementById('dialog-engine-type').innerText = details.F_EngType;
-            document.getElementById('dialog-fault-desc').innerText = details.F_FaultDesc;
-            document.getElementById('dialog-fault-reason').innerText = details.F_FaultReason;
-            document.getElementById('dialog-solution').innerText = details.F_SloveFault;
-
-            const rate = document.getElementById('dialog-rate');
-            rate.innerHTML = '';
-            for (let i = 1; i <= 5; i++) {
-                const star = document.createElement('i');
-                star.className = 'el-rate__icon el-icon-star-off';
-                if (i <= C_Review) {
-                    star.classList.add('el-rate__icon--full');
-                }
-                star.dataset.value = i;
-                star.onclick = () => updateRate(i);
-                rate.appendChild(star);
-            }
-
-            dialog.style.display = 'block';
-        }
-
-        function closeDialog() {
-            dialog.style.display = 'none';
-        }
-
-        function updateRate(rate) {
-            axios.get('http://8.137.80.44:8081/api/grade/update', {
-                params: {
-                    fPkId: caseDetails.F_PKId,
-                    rate: String(rate)
-                }
-            }).then(response => {
-                alert('评分数据已成功更新');
-                C_Review = rate;
-                showDialog(caseDetails, rate);
-            }).catch(error => {
-                console.error('请求失败:', error);
-            });
-        }
-
-        function fetchTableData() {
-            axios.get('http://8.137.80.44:8081/api/fault/all').then(response => {
-                populateTable(response.data, 'table-data');
-            }).catch(error => {
-                console.error('请求失败:', error);
-            });
-        }
-
-        function fetchCollectTableData() {
-            axios.get('http://8.137.80.44:8081/api/fault/starlist').then(response => {
-                populateTable(response.data, 'collect-table-data');
-            }).catch(error => {
-                console.error('请求失败:', error);
-            });
-        }
-
-        function populateTable(data, tableId) {
-            const table = document.getElementById(tableId);
-            table.innerHTML = '';
-            data.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.F_PKId}</td>
-                    <td>${item.F_ProModel}</td>
-                    <td>${item.F_ProSerie}</td>
-                    <td>${item.F_FaultDesc}</td>
-                    <td>
-                        <button class="el-link el-link--primary" onclick='showDetails(${JSON.stringify(item)})'>查看详情</button>
-                        <button class="el-link el-link--primary" onclick='addCollectCase(${JSON.stringify(item)})'>收藏</button>
-                    </td>
-                `;
-                table.appendChild(row);
-            });
-        }
-
-        function showDetails(rowdata) {
-            axios.get('http://8.137.80.44:8081/api/grade/get', {
-                params: {
-                    fPkId: rowdata.F_PKId
-                }
-            }).then(response => {
-                showDialog(rowdata, Number(response.data.C_Review));
-            }).catch(error => {
-                console.error('请求失败:', error);
-            });
-        }
-
-        function addCollectCase(rowdata) {
-            axios.get('http://8.137.80.44:8081/api/fault/addstarlist', {
-                params: {
-                    F_PKId: rowdata.F_PKId
-                }
-            }).then(response => {
-                if (response.data == 1) {
-                    alert('收藏成功！');
-                    fetchCollectTableData();
-                } else if (response.data == -1) {
-                    alert('此案例已经收藏了！');
-                }
-            }).catch(error => {
-                console.error('请求失败:', error);
-            });
-        }
-
-        function delCollectCase(rowdata) {
-            axios.get('http://8.137.80.44:8081/api/fault/delstarcase', {
-                params: {
-                    F_PKId: rowdata.F_PKId
-                }
-            }).then(response => {
-                if (response.data == 1) {
-                    alert('移除成功！');
-                    fetchCollectTableData();
-                }
-            }).catch(error => {
-                console.error('请求失败:', error);
-            });
-        }
-
-        function searchData() {
-            const carSeries = document.getElementById('car-series').value;
-            const carType = document.getElementById('car-type').value;
-            const keyword = document.getElementById('keyword').value;
-
-            axios.get('http://8.137.80.44:8081/api/fault/findAppointFaults', {
-                params: {
-                    F_FaultDescKeyword: keyword,
-                    F_ProSerie: carType,
-                    F_ProModel: carSeries
-                }
-            }).then(response => {
-                populateTable(response.data, 'table-data');
-            }).catch(error => {
-                console.error('请求失败:', error);
-            });
-        }
-
-        function searchStarData() {
-            const carSeries = document.getElementById('collect-car-series').value;
-            const carType = document.getElementById('collect-car-type').value;
-            const keyword = document.getElementById('collect-keyword').value;
-
-            axios.get('http://8.137.80.44:8081/api/fault/findAppointStarFaults', {
-                params: {
-                    F_FaultDescKeyword: keyword,
-                    F_ProSerie: carType,
-                    F_ProModel: carSeries
-                }
-            }).then(response => {
-                populateTable(response.data, 'collect-table-data');
-            }).catch(error => {
-                console.error('请求失败:', error);
-            });
-        }
-
-        document.getElementById('toggle-collect').onclick = function() {
-            const allCaseTable = document.getElementById('all-case-table');
-            const collectCaseTable = document.getElementById('collect-case-table');
-            const isCollect = collectCaseTable.style.display === 'block';
-
-            if (isCollect) {
-                allCaseTable.style.display = 'block';
-                collectCaseTable.style.display = 'none';
-                this.innerText = '查看个人收藏案例';
-            } else {
-                allCaseTable.style.display = 'none';
-                collectCaseTable.style.display = 'block';
-                this.innerText = '查看全部案例';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchTableData();
-            fetchCollectTableData();
-
-            const carSeriesSelect = document.getElementById('car-series');
-            const carTypeSelect = document.getElementById('car-type');
-            const collectCarSeriesSelect = document.getElementById('collect-car-series');
-            const collectCarTypeSelect = document.getElementById('collect-car-type');
-
-            cars.forEach(car => {
-                const option = document.createElement('option');
-                option.value = car;
-                option.innerText = car;
-                carSeriesSelect.appendChild(option);
-                collectCarSeriesSelect.appendChild(option.cloneNode(true));
-            });
-
-            cars2.forEach(car => {
-                const option = document.createElement('option');
-                option.value = car;
-                option.innerText = car;
-                carTypeSelect.appendChild(option);
-                collectCarTypeSelect.appendChild(option.cloneNode(true));
-            });
-        });
-    </script>
 </body>
+<!-- Vue -->
+<script src="../js/vue.js"></script>
+<!-- axios网络请求库 -->
+<script src="../js/axios.min.js"></script>
+<!-- echarts库 -->
+<script src="../js/echarts.min.js"></script>
+<!-- 引入element ui组件库 -->
+<script src="../js/elementui.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                // 弹窗是否展示
+                dialogShow: false,
+                // 用户点击查看详情时，选择的案例数据
+                caseDetails: {},
+                caseDetailsC_Review: null,
+                // 搜索条件
+                dataFilter: {
+                    // 用户选择的车系
+                    carSeries: null,
+                    // 关键词
+                    keyword: null,
+                    // 选择的车型
+                    carType: null
+                },
+                // 品牌选择数组
+                cars: ['大众', '宝马', '奔驰', '奥迪', '本田', '日产', '沃尔沃', '丰田'],
+                cars2: ['卡罗拉', '凯美瑞', '科鲁兹', 'C级', '朗逸', '迈腾', '5系'],
+                // 所有案例数据数组
+                tableData: [],
+                // 用户点击个人收藏案例时，动态控制表格渲染情况
+                isShowCollectTable: false,
+                collectText: "查看个人收藏案例",
+                // 收藏案例数据
+                collectTableData: [],
+                selectedRows: [] // 用于存储选中的收藏案例数据
+            }
+        },
+        mounted() {
+            this.refreshAllCase();
+            this.refreshStarCase();
+        },
+        methods: {
+            refreshAllCase(){
+                // 获取全部案例
+                axios.get('http://8.137.80.44:8081/api/fault/all').then(response => {
+                    this.tableData = response.data;
+                }).catch(error => {
+                    // 请求失败，打印错误信息
+                    console.error('请求失败:', error);
+                });
+            },
+            refreshStarCase(){
+                // 获取个人收藏案例
+                axios.get('http://8.137.80.44:8081/api/fault/starlist').then(response => {
+                    this.collectTableData = response.data;
+                }).catch(error => {
+                    // 请求失败，打印错误信息
+                    console.error('请求失败:', error);
+                });
+            },
+            // 用户点击查看案例的调用函数
+            showDetails(rowdata){
+                // 修改用户指定的数据
+                this.caseDetails = rowdata;
+                // 请求获取评分数据
+                axios.get('http://8.137.80.44:8081/api/grade/get',{
+                    params: {
+                        fPkId: rowdata.F_PKId
+                    }
+                }).then(response => {
+                    console.log("评分数据获取::",response.data);
+                    // 评分数据加入
+                    this.caseDetailsC_Review = Number(response.data.C_Review);
+                    // 展示弹窗
+                    this.dialogShow = true;
+                }).catch(error => {
+                    // 请求失败，打印错误信息
+                    console.error('请求失败:', error);
+                });
+            },
+            // 用户修改评分 可能是修改或添加
+            updateRate(rate){
+                axios.get('http://8.137.80.44:8081/api/grade/update',{
+                    params: {
+                        fPkId: this.caseDetails.F_PKId,
+                        rate: String(rate)
+                    }
+                }).then(response => {
+                    this.$message({
+                        message: '评分数据已成功更新',
+                        type: 'success'
+                    });
+                    this.caseDetailsC_Review = Number(rate);
+                }).catch(error => {
+                    // 请求失败，打印错误信息
+                    console.error('请求失败:', error);
+                });
+            },
+            // 用户点击搜索案例时的调用函数
+            searchData(){
+                // 判断用户是否有选条件
+                if ( this.dataFilter.carSeries == null && this.dataFilter.carType == null && this.dataFilter.keyword == null ) {
+                    alert("请至少选择一个查询条件！");
+                    return;
+                }
+                // 请求后端条件搜索数据
+                axios.get('http://8.137.80.44:8081/api/fault/findAppointFaults',{
+                    params: {
+                        F_FaultDescKeyword: this.dataFilter.keyword,
+                        F_ProSerie: this.dataFilter.carType,
+                        F_ProModel: this.dataFilter.carSeries
+                    }
+                }).then(response => {
+                    this.tableData = response.data;
+                }).catch(error => {
+                    // 请求失败，打印错误信息
+                    console.error('请求失败:', error);
+                });
+
+            },
+            // 按条件搜索收藏案例
+            searchStarData(){
+                // 判断用户是否有选条件
+                if ( this.dataFilter.carSeries == null && this.dataFilter.carType == null && this.dataFilter.keyword == null ) {
+                    alert("请至少选择一个查询条件！");
+                    return;
+                }
+                // 请求后端条件搜索数据
+                axios.get('http://8.137.80.44:8081/api/fault/findAppointStarFaults',{
+                    params: {
+                        F_FaultDescKeyword: this.dataFilter.keyword,
+                        F_ProSerie: this.dataFilter.carType,
+                        F_ProModel: this.dataFilter.carSeries
+                    }
+                }).then(response => {
+                    this.collectTableData = response.data;
+                }).catch(error => {
+                    // 请求失败，打印错误信息
+                    console.error('请求失败:', error);
+                });
+
+            },
+            // 用户关闭查看案例弹窗
+            closeCaseDialog(){
+                this.dialogShow = false;
+            },
+            // 点击查看收藏按钮
+            showCollectTable(){
+                this.isShowCollectTable = !this.isShowCollectTable;
+                this.collectText = this.isShowCollectTable ? "查看全部案例" : "查看个人收藏案例";
+                
+            },
+            // 用户添加收藏案例
+            addCollectCase(rowdata){
+                console.log("选择的收藏案例信息：", rowdata);
+
+                axios.get('http://8.137.80.44:8081/api/fault/addstarlist',{
+                    params: {
+                        F_PKId: rowdata.F_PKId,
+                    }
+                }).then(response => {
+                    console.log("添加案例成功：",response);
+
+                    if (response.data == 1) {
+                        alert("收藏成功！");
+                        this.refreshStarCase();
+                    }else if (response.data == -1) {
+                        alert("此案例已经收藏了！");
+                    }
+
+                }).catch(error => {
+                    // 请求失败，打印错误信息
+                    console.error('请求失败:', error);
+                });
+            },
+            // 用户删除收藏案例-单个
+            delCollectCase(rowdata){
+                axios.get('http://8.137.80.44:8081/api/fault/delstarcase',{
+                    params: {
+                        F_PKId: rowdata.F_PKId,
+                    }
+                }).then(response => {
+                    if (response.data == 1) {
+                        alert("移除成功！");
+                        axios.get('http://8.137.80.44:8081/api/fault/starlist').then(response => {
+                            this.collectTableData = response.data;
+                            this.refreshStarCase();
+                        }).catch(error => {
+                            // 请求失败，打印错误信息
+                            console.error('请求失败:', error);
+                        });
+                    }
+                }).catch(error => {
+                    // 请求失败，打印错误信息
+                    console.error('请求失败:', error);
+                });
+            },
+            // 用户删除收藏案例-多个
+            delCollectCase(){
+                console.log(this.selectedRows);
+                if (this.selectedRows.length == 0) {
+                    alert("至少选中一行数据！");
+                    return;
+                }
+                let i = this.selectedRows.length;
+                for (const row of this.selectedRows) {
+                    axios.get('http://8.137.80.44:8081/api/fault/delstarcase',{
+                        params: {
+                            F_PKId: row.F_PKId,
+                        }
+                    }).then(response => {
+                        i = i - 1;
+                    });
+                }
+
+                let then = this;
+
+                const fun1 = function(){
+                    setTimeout(function() {
+                        if (i > 0) {
+                            // 继续等待 递归调用
+                            fun1();
+                        }else{
+                            alert("移除成功！");
+                            then.refreshStarCase();
+                        }
+                    }, 1000);
+                }
+
+                fun1();
+            },
+            handleSelect(selection, row) {
+                // selection 是当前已选中的所有行的数组
+                // row 是当前被选中的行数据
+                this.selectedRows = [...selection];
+            },
+            handleSelectAll(selection) {
+                // selection 是当前已选中的所有行的数组
+                this.selectedRows = [...selection];
+            }
+        }
+    });
+
+</script>
+<!-- 引入导航栏CSS -->
+<link rel="stylesheet" href="../public/navigation.css">
+<style>
+    
+</style>
+
 </html>
