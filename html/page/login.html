@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <title>系统登录</title>
 </head>
-<!-- import CSS -->
-<link rel="stylesheet" href="../js/index.css">
+<!-- 引入样式 -->
+<link rel="stylesheet" href="../js/elementui.css">
 <body>
     <div id="app">
         <div class="login-container">
@@ -18,7 +18,7 @@
                   v-model="formData.username"
                   auto-complete="off"
                   @change="formData.username=formData.username.replace(/\s+/g,'')"
-                  prefix-icon="icon iconfont icon-peoplefill"
+                  prefix-icon="el-icon-search"
                   placeholder="请输入用户名"
                 ></el-input>
               </el-form-item>
@@ -27,19 +27,19 @@
                   :type="state ? 'text' : 'password'"
                   v-model="formData.password"
                   auto-complete="off"
-                  prefix-icon="icon iconfont icon-mima"
+                  prefix-icon="el-icon-share"
                   placeholder="请输入密码"
                 >
                   <i
                     slot="suffix"
                     @click="showOrHide"
                     style="cursor:pointer;"
-                    class="state ? 'icon iconfont icon-yanjing_kai' : 'icon iconfont icon-yanjing_bi'"
+                    v-bind:class="state ? 'el-icon-delete' : 'el-icon-share'"
                   ></i>
                 </el-input>
               </el-form-item>
               <el-form-item style="padding-top:20px">
-                <el-button class="login-button" @click.native.prevent="handleLogin">登录</el-button>
+                <el-button class="login-button" @click="handleLogin">登录</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -47,8 +47,8 @@
 </body>
 <!-- Vue -->
 <script src="../js/vue.js"></script>
-<!-- 引入组件库 -->
-<script src="../js/index.js"></script>
+<!-- 引入element ui组件库 -->
+<script src="../js/elementui.js"></script>
 <script>
     new Vue({
         el: '#app',
