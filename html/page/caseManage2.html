@@ -19,20 +19,20 @@
             <el-col :span="24" class="remain">
                 <!-- 左侧导航 -->
                 <nav :class="menu-collapsed">
-                    <el-menu id="elmenu" background-color="#eef1f6" text-color="#053343" active-text-color="#409EFF">
-                        <el-menu-item>
+                    <el-menu id="elmenu" default-active="3" background-color="#eef1f6" text-color="#053343" active-text-color="#409EFF">
+                        <el-menu-item index="1" onclick="navjump(1)">
                             <i class="el-icon-connection"></i>
                             <span style="padding-left:4px">故障数据统计与分析</span>
                         </el-menu-item>
-                        <el-menu-item>
+                        <el-menu-item index="2" onclick="navjump(2)">
                             <i class="el-icon-connection"></i>
                             <span style="padding-left:4px">故障诊断</span>
                         </el-menu-item>
-                        <el-menu-item>
+                        <el-menu-item index="3" onclick="navjump(3)">
                             <i class="el-icon-connection"></i>
                             <span style="padding-left:4px">案例管理</span>
                         </el-menu-item>
-                        <el-menu-item>
+                        <el-menu-item index="4" onclick="navjump(4)">
                             <i class="el-icon-connection"></i>
                             <span style="padding-left:4px">技术学习</span>
                         </el-menu-item>
@@ -170,6 +170,7 @@
 <script src="../js/echarts.min.js"></script>
 <!-- 引入element ui组件库 -->
 <script src="../js/elementui.js"></script>
+<script src="../public/navigation.js"></script>
 
 <script>
     new Vue({
